@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    <title>Edit-Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+
+<style>
+
+.edit-profile-head{
+font-family: Poppins;
+font-size: 37px;
+font-weight: 500;
+line-height: 55px;
+letter-spacing: 0em;
+color:#414146;
+}
+
+.form-head{
+    padding: 2% 6% 2% 6%;
+}
+
+.edit-input{
+font-family: Poppins;
+font-size: 18px;
+font-weight: 500;
+line-height: 27px;
+letter-spacing: 0em;
+text-align: left;
+color: #494949;
+
+}
+.edit-label{
+font-family: Poppins;
+font-size: 18px;
+font-weight: 500;
+line-height: 27px;
+letter-spacing: 0em;
+color: #494949;
+
+}
+.edit-select{
+font-family: Poppins;
+font-size: 18px;
+font-weight: 500;
+line-height: 27px;
+letter-spacing: 0em;
+text-align: left;
+color: #494949;
+}
+.modal-dialog {
+ max-width: 60% !important;
+}
+
+.edit-profile-form{
+    padding: 2% 6% 1% 9%;
+
+}
+.edit-form-left{
+text-align: center;
+
+}
+
+.edit-form-right{
+
+}
+
+
+
+.edit-span{
+font-family: Poppins;
+font-size: 15px;
+font-weight: 600;
+line-height: 23px;
+letter-spacing: 0em;
+color: #606060;
+
+}
+.edit-profile-para{
+font-family: Poppins;
+font-size: 15px;
+font-weight: 400;
+line-height: 23px;
+letter-spacing: 0em;
+color: #606060;
+padding-top: 2%;
+}
+.edit-heading{
+    font-family: Poppins;
+font-size: 18px;
+font-weight: 500;
+line-height: 27px;
+letter-spacing: 0em;
+text-align: left;
+color: #414146;
+}
+.drop-zone {
+  /* max-width: 200px;
+  height: 50px; */
+  font-family: Poppins;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    letter-spacing: 0em;
+    color:#B2B2B2;
+    padding: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    border: 1px dashed#414146;
+    border-radius: 10px;
+    width: 70%;
+}
+
+.drop-zone--over {
+  border-style: solid;
+}
+
+.drop-zone__input {
+  opacity: 0;
+    position: absolute;
+    /* width: 100%;
+    height: 100%; */
+
+}
+.drop-zone__thumb {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #cccccc;
+  background-size: cover;
+  position: relative;
+}
+.drop-zone__thumb::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px 0;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 14px;
+  text-align: center;
+}
+.edit-form-body{
+background-color:#F2F2F2;
+}
+.edit-profile-button{
+background-color: #3A0761;
+font-family: Poppins;
+font-size: 22px;
+font-weight: 600;
+line-height: 33px;
+letter-spacing: 0em;
+color: #FFFFFF;
+width: 100%;
+border: none;
+padding: 1%;
+}
+.modal-body {
+    padding: 0;
+}
+
+
+@media only screen and (max-width: 786px) {
+    .modal-dialog {
+    max-width: 500px;
+}
+}
+</style>
+</head>
+
+<body>
+
+
+
+
+
+
+
+
+             <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                     submit
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel edit-heading">User: suriya</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body edit-form-body">
+                                <div class="container">
+                                    <div class="row pt-4">
+                                          <div class="col-md-3 edit-form-left">
+                                           <img src="{% static 'image/editProfile.png' %}" alt="" class="img-fluid">
+                                          </div>
+                                          <div class="col-md-9 edit-form-right">
+                                           <h1 class="edit-profile-head">suriya</h1>
+                                            <div class="drop-zone">
+                                                <span class="drop-zone__prompt">Drop your File here or Click in this area</span>
+                                                <input type="file" name="myFile" class="drop-zone__input">
+                                            </div>
+
+
+                                            <p class="edit-profile-para">Avatar by newai.com <span class="edit-span">Or upload your won..</span> </p>
+                                          </div>
+                                    </div>
+                                </div>
+                                     <form class="edit-profile-form">
+                                          <div class="form-group row  form-head " >
+                                             <label for="inputPassword" class="col-sm-4 col-form-label edit-label">User Name</label>
+                                             <div class="col-sm-8">
+                                               <input type="text" class="form-control edit-input" id="User Name" placeholder="Surya">
+                                             </div>
+                                           </div>
+                                           <div class="form-group row form-head">
+                                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Email</label>
+                                               <div class="col-sm-8">
+                                                 <input type="text" class="form-control edit-input" id="Email" placeholder="suriya@gmail.com">
+                                               </div>
+                                             </div>
+                                             <div class="form-group row form-head">
+                                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Password</label>
+                                               <div class="col-sm-8">
+                                                 <input type="password" class="form-control edit-input" id="inputPassword" placeholder="Password">
+                                               </div>
+                                             </div>
+                                             <div class="form-group row form-head">
+                                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Full Name</label>
+                                               <div class="col-sm-8">
+                                                 <input type="text" class="form-control edit-input" id="Full Name" placeholder="Suriya Doe">
+                                               </div>
+                                             </div>
+                                             <div class="form-group row form-head">
+                                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Title</label>
+                                               <div class="col-sm-8">
+                                                 <input type="text" class="form-control edit-input" id="Title" placeholder="Administrator">
+                                               </div>
+                                             </div>
+                                             <div class="form-group row form-head">
+                                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Language</label>
+                                               <div class="col-sm-8">
+                                                   <select class="form-select edit-select" aria-label="Default select example">
+                                                       <option selected>English</option>
+                                                       <option value="1">One</option>
+                                                       <option value="2">Two</option>
+                                                       <option value="3">Three</option>
+                                                     </select>
+                                               </div>
+                                             </div>
+
+                                     </form>
+                                     <button class="edit-profile-button">Save Profile</button>
+                            </div>
+
+                        </div>
+                        </div>
+                    </div>
+
+            <!-- <div class="">
+                 <div class="d-flex">
+                       <div class="">
+                        <img src="./img/editProfile.png" alt="">
+                       </div>
+                       <div class="">
+                        <h1 class="edit-profile-head">suriya</h1>
+                       </div>
+                 </div>
+
+                <div class="">
+                    <form>
+                       <div class="form-group row  form-head " >
+                          <label for="inputPassword" class="col-sm-2 col-form-label edit-label">User Name</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control edit-input" id="User Name" placeholder="Surya">
+                          </div>
+                        </div>
+                        <div class="form-group row form-head">
+                            <label for="inputPassword" class="col-sm-2 col-form-label edit-label">Email</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control edit-input" id="Email" placeholder="suriya@gmail.com">
+                            </div>
+                          </div>
+                          <div class="form-group row form-head">
+                            <label for="inputPassword" class="col-sm-2 col-form-label edit-label">Password</label>
+                            <div class="col-sm-8">
+                              <input type="password" class="form-control edit-input" id="inputPassword" placeholder="Password">
+                            </div>
+                          </div>
+                          <div class="form-group row form-head">
+                            <label for="inputPassword" class="col-sm-2 col-form-label edit-label">Full Name</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control edit-input" id="Full Name" placeholder="Suriya Doe">
+                            </div>
+                          </div>
+                          <div class="form-group row form-head">
+                            <label for="inputPassword" class="col-sm-2 col-form-label edit-label">Title</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control edit-input" id="Title" placeholder="Administrator">
+                            </div>
+                          </div>
+                          <div class="form-group row form-head">
+                            <label for="inputPassword" class="col-sm-2 col-form-label edit-label">Language</label>
+                            <div class="col-sm-8">
+                                <select class="form-select edit-select" aria-label="Default select example">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                  </select>
+                            </div>
+                          </div>
+                      </form>
+                </div>
+            </div> -->
+
+
+
+
+
+
+
+
+
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
+</html>

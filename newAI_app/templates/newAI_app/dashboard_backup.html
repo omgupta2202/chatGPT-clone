@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Dashboard.css' %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    <title>Edit-Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <title>Dashboard</title>
+    <style>
+
+        .edit-profile-head{
+        font-family: Poppins;
+        font-size: 37px;
+        font-weight: 500;
+        line-height: 55px;
+        letter-spacing: 0em;
+        color:#414146;
+        }
+
+        .form-head{
+            padding: 2% 6% 2% 6%;
+        }
+
+        .edit-input{
+        font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #494949;
+
+        }
+        .edit-label{
+        font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        color: #494949;
+
+        }
+        .edit-select{
+        font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #494949;
+        }
+        .modal-dialog {
+         max-width: 60% !important;
+        }
+
+        .edit-profile-form{
+            padding: 2% 6% 1% 9%;
+
+        }
+        .edit-form-left{
+        text-align: center;
+
+        }
+
+        .edit-form-right{
+
+        }
+
+
+
+        .edit-span{
+        font-family: Poppins;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 23px;
+        letter-spacing: 0em;
+        color: #606060;
+
+        }
+        .edit-profile-para{
+        font-family: Poppins;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 23px;
+        letter-spacing: 0em;
+        color: #606060;
+        padding-top: 2%;
+        }
+        .edit-heading{
+            font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #414146;
+        }
+        .drop-zone {
+          /* max-width: 200px;
+          height: 50px; */
+          font-family: Poppins;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 23px;
+            letter-spacing: 0em;
+            color:#B2B2B2;
+            padding: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            border: 1px dashed#414146;
+            border-radius: 10px;
+            width: 70%;
+        }
+
+        .drop-zone--over {
+          border-style: solid;
+        }
+
+        .drop-zone__input {
+          opacity: 0;
+            position: absolute;
+            /* width: 100%;
+            height: 100%; */
+
+        }
+        .drop-zone__thumb {
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+          overflow: hidden;
+          background-color: #cccccc;
+          background-size: cover;
+          position: relative;
+        }
+        .drop-zone__thumb::after {
+          content: attr(data-label);
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          padding: 5px 0;
+          color: #ffffff;
+          background: rgba(0, 0, 0, 0.75);
+          font-size: 14px;
+          text-align: center;
+        }
+        .edit-form-body{
+        background-color:#F2F2F2;
+        }
+        .edit-profile-button{
+        background-color: #3A0761;
+        font-family: Poppins;
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 33px;
+        letter-spacing: 0em;
+        color: #FFFFFF;
+        width: 100%;
+        border: none;
+        padding: 1%;
+        text-align: center;
+     }
+
+        .modal-body {
+            padding: 0;
+        }
+
+
+        @media only screen and (max-width: 786px) {
+            .modal-dialog {
+            max-width: 500px;
+        }
+        }
+        </style>
+</head>
+<body  class="dashboard-container">
+    <nav id="sidebar">
+        <div class="float-top">
+            <div class="sidebar-controls">
+                <button class="new-chat"><i class="fa fa-plus"></i> New chat</button>
+                <button class="hide-sidebar">
+                    <img src="{% static 'image/add-post 1.svg' %}" alt="">
+                </button>
+            </div>
+            <ul class="conversations">
+                <li class="grouping">Today</li>
+                <li class="active">
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li class="grouping">Yesterday</li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i>Make your design looks more .....</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li class="grouping">Previous 7 days</li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+                <li>
+                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
+                    <div class="fade"></div>
+                    <div class="edit-buttons">
+                        <button><i class="fa fa-edit"></i></button>
+                        <button><i class="fa fa-trash"></i></button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="user-menu">
+            <button>
+                <!-- <i class="user-icon">u</i>
+                username
+                <i class="fa fa-ellipsis dots"></i> -->
+            </button>
+            <ul>
+                <li><button>My plan</button></li>
+                <li><button>Custom instructions</button></li>
+                <li><button>Settings &amp; Beta</button></li>
+                <li><button>Log out</button></li>
+            </ul>
+        </div>
+    </nav>
+
+
+     <!-- Modal -->
+     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel edit-heading">User: suriya</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body edit-form-body">
+                <div class="container">
+                    <div class="row pt-4">
+                          <div class="col-md-3 edit-form-left">
+                           <img src="{% static 'image/editProfile.png' %}" alt="" class="img-fluid">
+                          </div>
+                          <div class="col-md-9 edit-form-right">
+                           <h1 class="edit-profile-head">suriya</h1>
+                            <div class="drop-zone">
+                                <span class="drop-zone__prompt">Drop your File here or Click in this area</span>
+                                <input type="file" name="myFile" class="drop-zone__input">
+                            </div>
+
+
+                            <p class="edit-profile-para">Avatar by newai.com <span class="edit-span">Or upload your won..</span> </p>
+                          </div>
+                    </div>
+                </div>
+                     <form class="edit-profile-form">
+                          <div class="form-group row  form-head " >
+                             <label for="inputPassword" class="col-sm-4 col-form-label edit-label">User Name</label>
+                             <div class="col-sm-8">
+                               <input type="text" class="form-control edit-input" id="User Name" placeholder="Surya">
+                             </div>
+                           </div>
+                           <div class="form-group row form-head">
+                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Email</label>
+                               <div class="col-sm-8">
+                                 <input type="text" class="form-control edit-input" id="Email" placeholder="suriya@gmail.com">
+                               </div>
+                             </div>
+                             <div class="form-group row form-head">
+                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Password</label>
+                               <div class="col-sm-8">
+                                 <input type="password" class="form-control edit-input" id="inputPassword" placeholder="Password">
+                               </div>
+                             </div>
+                             <div class="form-group row form-head">
+                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Full Name</label>
+                               <div class="col-sm-8">
+                                 <input type="text" class="form-control edit-input" id="Full Name" placeholder="Suriya Doe">
+                               </div>
+                             </div>
+                             <div class="form-group row form-head">
+                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Title</label>
+                               <div class="col-sm-8">
+                                 <input type="text" class="form-control edit-input" id="Title" placeholder="Administrator">
+                               </div>
+                             </div>
+                             <div class="form-group row form-head">
+                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Language</label>
+                               <div class="col-sm-8">
+                                   <select class="form-select edit-select" aria-label="Default select example">
+                                       <option selected>English</option>
+                                       <option value="1">One</option>
+                                       <option value="2">Two</option>
+                                       <option value="3">Three</option>
+                                     </select>
+                               </div>
+                             </div>
+
+                     </form>
+                     <button class="edit-profile-button">Save Profile</button>
+            </div>
+
+        </div>
+        </div>
+    </div>
+
+
+
+
+    <main>
+        <div class="view new-chat-view">
+            <div class="model-selector">
+                Default (New AI.1.1)
+                <div class="model-selector-icon">
+
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <img src="{% static  'image/Ellipse 5.png' %}" alt="">
+                       </button>
+
+                    <img src="{% static 'image/Mask group.svg' %}" alt="">
+                </div>
+
+            </div>
+            <div class="logo">
+                <div class=""  style="position: relative; text-align: center;padding-top: 2%;
+                ">
+                    <!-- <img src="img/Star 1.svg" alt="star" class="img-fluid"> -->
+                    <span class="sign-inlogo-heading">
+                        <!-- New AI -->
+                        <img src="{% static 'image/chatgptLogo.svg' %}" alt="">
+                    </span>
+
+                    <!-- <div class="sign-in-logo"> -->
+                        <!-- <img src="img/NI.svg" alt="ni" class="img-fluid"> -->
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="view conversation-view">
+            <div class="model-name">
+                <i class="fa fa-bolt"></i> Default (GPT-3.5)
+            </div>
+            <div class="user message">
+                <div class="identity">
+                    <img src="{% static 'image/outputLogo.svg' %}" alt="">
+                    <!-- <i class="user-icon">u</i> -->
+                </div>
+                <div class="content">
+                    <p>How to Make video</p>
+                </div>
+            </div>
+            <div class="assistant message">
+                <div class="identity">
+                    <img src="{% static 'image/nilogo.svg' %}" alt="">
+<!--                     <i class="gpt user-icon">G</i>-->
+                </div>
+                <div class="content">
+                    <p>Creating a video can be a multi-step process, and it depends on what kind of video you want to make. Here's a general overview of the steps involved in making a video:
+                        Pre-Production:
+                        Concept and Planning: Start by deciding what your video will be about. Write a script or outline for your video, and plan the shots you'll need.
+                        Storyboarding: Create a visual representation of your video with rough sketches or use specialized software for storyboarding.
+                        Location and Props: Decide where you'll shoot your video and gather any necessary props or equipment.
+                        Production:
+                        Shooting: Use a video camera or a smartphone with a good camera to record your footage. Ensure proper lighting, clear audio, and stable shots.
+                        Acting and Direction: If your video includes actors, direct them as needed, ensuring they follow the script and achieve the desired performances.
+                        Post-Production:
+                    </p>
+                        <div class="d-flex justify-content-end">
+                            <div class="" style="padding-right: 1%;"><button class="approved-button">Approved</button></div>
+                            <div><button class="disapproved-button">Disapproved</button></div>
+                       </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="message-form">
+            <div class="message-wrapper">
+                <form method="post">{% csrf_token %}
+                    <textarea id="message" rows="1" name="user-prompt" placeholder="Send a message"></textarea>
+                    <button type="submit" class="send-button">
+                        <i class="fa fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+   <script>
+    const sidebar = document.querySelector("#sidebar");
+const hide_sidebar = document.querySelector(".hide-sidebar");
+const new_chat_button = document.querySelector(".new-chat");
+
+hide_sidebar.addEventListener( "click", function() {
+    sidebar.classList.toggle( "hidden" );
+} );
+
+const user_menu = document.querySelector(".user-menu ul");
+const show_user_menu = document.querySelector(".user-menu button");
+
+show_user_menu.addEventListener( "click", function() {
+    if( user_menu.classList.contains("show") ) {
+        user_menu.classList.toggle( "show" );
+        setTimeout( function() {
+            user_menu.classList.toggle( "show-animate" );
+        }, 200 );
+    } else {
+        user_menu.classList.toggle( "show-animate" );
+        setTimeout( function() {
+            user_menu.classList.toggle( "show" );
+        }, 50 );
+    }
+} );
+
+const models = document.querySelectorAll(".model-selector button");
+
+for( const model of models ) {
+    model.addEventListener("click", function() {
+        document.querySelector(".model-selector button.selected")?.classList.remove("selected");
+        model.classList.add("selected");
+    });
+}
+
+const message_box = document.querySelector("#message");
+
+message_box.addEventListener("keyup", function() {
+    message_box.style.height = "auto";
+    let height = message_box.scrollHeight + 2;
+    if( height > 200 ) {
+        height = 200;
+    }
+    message_box.style.height = height + "px";
+});
+
+function show_view( view_selector ) {
+    document.querySelectorAll(".view").forEach(view => {
+        view.style.display = "none";
+    });
+
+    document.querySelector(view_selector).style.display = "flex";
+}
+
+new_chat_button.addEventListener("click", function() {
+    show_view( ".new-chat-view" );
+});
+
+document.querySelectorAll(".conversation-button").forEach(button => {
+    button.addEventListener("click", function() {
+        show_view( ".conversation-view" );
+    })
+});
+   </script>
+
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+</body>
+</html>

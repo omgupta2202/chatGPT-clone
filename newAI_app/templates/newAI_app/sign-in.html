@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<!--      <link rel="stylesheet" href="./style/style.css">-->
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>sign-in </title>
+
+<!-- <style>
+
+
+    .sign-in-top{
+        background: linear-gradient(322.65deg, #375DCC 45.68%, #4252CC 63.28%, #6033CB 79.05%);
+        /* height: 30%; */
+        padding: 9%;
+
+    }
+
+ .sign-in-heading-one{
+    font-family: Poppins;
+font-size: 43px;
+font-weight: 500;
+line-height: 50px;
+letter-spacing: 0em;
+color: #FFFFFF;
+
+ }
+.sign-in-heading-two{
+    font-family: Poppins;
+font-size: 43px;
+font-weight: 700;
+line-height: 50px;
+letter-spacing: 0em;
+text-align: left;
+color: #FFFFFF;
+
+}
+.sign-in-heading-para{
+    font-family: Roboto;
+font-size: 20px;
+font-weight: 400;
+line-height: 31px;
+letter-spacing: 0em;
+color: #FFFFFF;
+}
+
+.sign-in-logo{
+    left: 12px;
+    position: absolute;
+    top: 11px;
+
+}
+
+.sign-in-loho-head{
+    position: relative;
+}
+
+.sign-inlogo-heading{
+font-family: Inter;
+font-size: 27px;
+font-weight: 400;
+line-height: 32px;
+letter-spacing: 0em;
+text-align: left;
+
+}
+
+.signin-right-heading{
+font-family: Cabinet Grotesk;
+font-size: 99px;
+font-weight: 800;
+line-height: 64px;
+letter-spacing: 0px;
+color: #FFFFFF;
+text-align: center;
+padding-bottom: 6%;
+}
+.signin-right-para{
+font-family: Poppins;
+font-size: 16px;
+font-weight: 500;
+line-height: 24px;
+letter-spacing: 0px;
+color:#FFFFFF80;
+text-align: center;
+padding-bottom: 8%;
+}
+
+.form-item{
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+.form-item input{
+  display: block;
+  width: 100%;
+ height: 50px;
+  background: transparent;
+  border: solid 1px #ccc;
+  transition: all .3s ease;
+  padding: 0 15px
+}
+.form-item input:focus{
+  border-color: #CACBCC;
+  background: transparent;
+
+}
+.form-item label{
+  position: absolute;
+  cursor: text;
+  z-index: 2;
+  top: 15px;
+  left: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  background: transparent;
+  padding: 0 10px;
+  color: #FFFFFF;
+  transition: all .3s ease
+}
+.form-item input:focus + label,
+.form-item input:valid + label{
+  font-size: 11px;
+  top: -5px;
+  background: transparent;
+
+
+}
+.form-item input:focus + label{
+  color: #FFFFFF;
+  background: transparent;
+
+
+}
+
+.sign-in-right{
+    background-color: #000950;
+    width: 60%;
+    padding: 10%;
+    text-align: center;
+}
+
+.sign-in-left{
+    width: 40%;
+
+}
+.reset-password{
+font-family: Poppins;
+font-size: 16px;
+font-weight: 500;
+line-height: 24px;
+letter-spacing: 0px;
+text-align: right;
+color:  #FFFFFF80;
+text-decoration: none !important;
+
+}
+
+.signin-button{
+font-family: Cabinet Grotesk;
+font-size: 19px;
+font-weight: 700;
+line-height: 24px;
+letter-spacing: 0px;
+text-align: center;
+color:#FFFFFF ;
+background-color: #FF1FAA;
+border-radius: 6.66px;
+padding: 2% 6% 2% 6%;
+}
+
+.signin-last-para{
+font-family: Cabinet Grotesk;
+font-size: 19px;
+font-weight: 700;
+line-height: 23px;
+letter-spacing: 0px;
+color:#FFFFFF ;
+padding-top: 3%;
+
+
+}
+.signin-last-span{
+font-family: Cabinet Grotesk;
+font-size: 19px;
+font-weight: 500;
+line-height: 23px;
+letter-spacing: 0px;
+color:#FFFFFF ;
+}
+
+.sign-icon-row{
+display: flex;
+justify-content: center;
+padding-top: 6%;
+}
+
+.sign-icon{
+    margin: 0 10px;
+  cursor: pointer;
+  background: white;
+    padding: 3% 5% 3% 5%;
+    border-radius: 11px
+}
+
+/* .or-class{
+font-size: 19px;
+font-weight: 500;
+line-height: 24px;
+letter-spacing: -0.3730769157409668px;
+text-align: center;
+color: #FFFFFF;
+} */
+.or-class {
+  overflow: hidden;
+  text-align: center;
+  font-family: Montserrat;
+font-size: 19px;
+font-weight: 500;
+line-height: 24px;
+letter-spacing: -0.3730769157409668px;
+text-align: center;
+color: #FFFFFF;
+padding-top: 5%;
+
+}
+
+.or-class::before,
+.or-class::after {
+  background-color:#FFFFFF;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 30%;
+}
+
+.or-class::before {
+  right: 0.5em;
+  margin-left: -50%;
+}
+
+.or-class::after {
+  left: 0.5em;
+  margin-right: -50%;
+}
+</style> -->
+
+
+
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+       <div class="" style="display: flex;">
+        <div class="sign-in-left">
+               <div class="d-flex flex-column " style="height: 100%;">
+                  <div class="sign-in-top">
+                    <div class=""  style="position: relative;">
+                        <img src="{% static 'image/Star 1.svg' %}" alt="star" class="img-fluid">
+                        <span class="sign-inlogo-heading">New AI</span>
+
+                        <div class="sign-in-logo">
+                            <img src="{% static 'image/NI.svg' %}" alt="ni" class="img-fluid">
+                        </div>
+                    </div>
+                      <div class="sign-in-logo-head">
+
+                       <h1 class="sign-in-heading-one">
+                        AI Models of
+                       </h1>
+                       <h1 class="sign-in-heading-two">
+                        Abstract Digital Art
+                    </h1>
+                    <p class="sign-in-heading-para">Make your design looks more attractive with AI abstract geometric digital art.</p>
+                     </div>
+                  </div>
+                  <div class="" style="height: 70%;">
+                    <img src="{% static 'image/signIn-img.png' %}" alt="sign-in" class="img-fluid">
+                  </div>
+               </div>
+
+        </div>
+        <div class=" sign-in-right">
+
+                <h1 class="signin-right-heading">Welcome</h1>
+                <p class="signin-right-para">Login with email</p>
+            {% if messages %}
+            <ul class="messages" style="color: red">
+            {% for message in messages %}
+                <li>{% if message.tags %}
+                {% endif %}
+                {{ message }}
+                </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+                <form method="post">{% csrf_token %}
+                      <div class="form-item">
+                        <input type="text" id="email" class="form-control" style="color: white" name="email" autocomplete="off" required>
+                        <label for="email" class="form-label">Email</label>
+                      </div>
+
+                      <div class="form-item">
+                        <input type="password" id="password" class="form-control" style="color: white" name="password" autocomplete="off" required>
+                        <label for="password" class="form-label">Password</label>
+                    </div>
+                     <p style="text-align: right;"><a href="" class="reset-password">Reset password</a></p>
+                       <button type="submit" class="signin-button">Login</button>
+
+                        <h2 class="or-class">OR</h2>
+                    <div class="sign-icon-row text-white">
+                        <div class="sign-icon"><img src="{% static 'image/Goggle.svg' %}" alt="google"></div>
+                        <div class="sign-icon"> <img src="{% static 'image/facebook.svg' %}" alt="facebook"> </div>
+                        <div class="sign-icon"> <img src="{% static 'image/apple.svg' %}" alt="apple"> </div>
+                    </div>
+                     <p class="signin-last-para">Don’t have account?<span class="signin-last-span"><a href="/sign-up">Register Now</a></span></p>
+
+                </form>
+
+        </div>
+       </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -4,6 +4,9 @@ from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .gpt_util import get_response
+from django.shortcuts import render, get_object_or_404
+from datetime import datetime, timedelta
+from .models import ChatLog, ChatMessage
 
 # Create your views here.
 
@@ -50,30 +53,12 @@ def signin_view(request):
         elif is_user is None:
             messages.info(request, 'Email or Password is incorrect!')
             return render(request, "newAI_app/sign-in.html")
-
-
-
-
     return render(request, "newAI_app/sign-in.html")
 
 
 def logout_view(request):
     logout(request)
     return redirect('/login')
-
-# def index(request):
-#     if request.method == 'POST':
-#         prompt = request.POST.get('user-prompt')
-#         response = get_response(prompt)
-#         if response:
-#             chat = ChatHistory.objects.create(user=request.user, usermsg=prompt, display_msg=response)
-#             for i in ChatHistory.objects.filter(user=request.user)
-#                 data = {"usermsg":usermsg,"display_msg":display_msg,"user":user}
-#             return JsonResponse({'data': data})
-#         else:
-#             return JsonResponse({'error': 'Incident ID not provided'}, status=400)
-#     return render(request, "newAI_app/dashboard.html")
-
 
 def index(request):
     if request.method == 'POST':
@@ -86,47 +71,33 @@ def index(request):
         else:
             return JsonResponse({'error': 'something went wrong'}, status=400)
 
-    return render(request, "newAI_app/dashboard.html")
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
 
+    previous_chats_today = ChatLog.objects.filter(start_time__date=today, user=request.user)
+    previous_chats_yesterday = ChatLog.objects.filter(start_time__date=yesterday, user=request.user)
+    previous_chats = ChatLog.objects.filter(start_time__date__lt=yesterday, user=request.user)
 
-# from django.shortcuts import render, HttpResponse
+    return render(request, 'newAI_app/dashboard.html', {
+        'previous_chats_today': previous_chats_today,
+        'previous_chats_yesterday': previous_chats_yesterday,
+        'previous_chats': previous_chats,
+    })
 
-# from django.views.decorators.csrf import csrf_exempt
-
-# from .models import ChatHistory, PromptHistory
-
-# import json
-
-
-# @csrf_exempt
-# def chat(request):
-#     if request.method == 'POST':
-#
-#         # Handle incoming message
-#
-#         data = json.loads(request.body.decode('utf-8'))
-#
-#         # message = request.POST.get('message', '')
-#         message = "HELLO"
-#         if message:
-#             response = get_response(message)
-#             chat = ChatHistory.objects.create(user=request.user, display_msg="this is the demo title")
-#             PromptHistory.objects.create(chat=chat, user_prompt=message, gpt_response=response)
-#
-#             return HttpResponse(status=201)
-#
-#         else:
-#
-#             return HttpResponse(status=400)
-#
-#     elif request.method == 'GET':
-#
-#         # Return all chat messages
-#
-#         messages = PromptHistory.objects.all()
-#
-#         message_list = [{'sender': request.user.email, 'message': msg.user_prompt} for msg in messages]
-#
-#         return HttpResponse(json.dumps(message_list), content_type='application/json')
-#
-#     return HttpResponse(status=400)
+def chat_view(request, chatlog_id=None):
+    if chatlog_id:
+        chatlog = get_object_or_404(ChatLog, pk=chatlog_id, user=request.user)
+        messages = chatlog.messages.all()
+        previous_chats_today = ChatLog.objects.filter(start_time__date=datetime.now().date(), user=request.user)
+        previous_chats_yesterday = ChatLog.objects.filter(start_time__date=(datetime.now().date() - timedelta(days=1)), user=request.user)
+        previous_chats = ChatLog.objects.filter(start_time__date__lt=(datetime.now().date() - timedelta(days=1)), user=request.user)
+        
+        return render(request, 'your_template.html', {
+            'chatlog': chatlog,
+            'messages': messages,
+            'previous_chats_today': previous_chats_today,
+            'previous_chats_yesterday': previous_chats_yesterday,
+            'previous_chats': previous_chats,
+        })
+    else:
+        return render(request, "newAI_app/dashboard.html")

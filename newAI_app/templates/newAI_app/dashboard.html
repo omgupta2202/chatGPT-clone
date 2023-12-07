@@ -29,37 +29,62 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var approveBtn = document.getElementById("hideElement");
-    
+        
             approveBtn.addEventListener("click", function() {
                 var liveResponses = document.querySelectorAll('[id="live-response"]');
                 var userInputFields = document.querySelectorAll('[id="user-input"]');
-    
-                var doc = new window.jspdf.jsPDF();
-                var yPos = 10;
-                var lineHeight = 10; // Adjust this value based on your font size and content
+        
+                var doc = new window.jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter' // Adjust this based on your requirements
+                });
                 
+                var yPos = 40; // Start yPos at 40 to account for margins
+                var lineHeight = 20; // Adjust this value based on your font size and content
+                var pageHeight = doc.internal.pageSize.height;
+                var isFirstPage = true;
+        
+                // Assuming liveResponses and userInputFields have the same length
                 for (var i = 0; i < (liveResponses.length+1)/2 -1 ; i++) {
                     var liveResponseText = liveResponses[i].value || liveResponses[i].innerText;
                     var userInputText = userInputFields[i].value || userInputFields[i].innerText;
-    
-                    var combinedText = "User Input: " + userInputText + "\nLive Response: " + liveResponseText;
-
-                    var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 20);
-                    var combinedLines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 20);
-
-                    if (yPos + combinedLines.length * lineHeight > doc.internal.pageSize.height - 20) {
+        
+                    var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
+        
+                    var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+                    var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+        
+                    var remainingSpace = pageHeight - yPos - 20;
+        
+                    if (!isFirstPage && lines.length * lineHeight > remainingSpace) {
                         doc.addPage();
-                        yPos = 10;
+                        yPos = 40; // Reset yPos for the new page
+                        isFirstPage = false;
+                        remainingSpace = pageHeight - 60; // Adjust for margins
                     }
         
-                    doc.text(combinedLines, 10, yPos);
-                    yPos += (combinedLines.length * lineHeight) + 10;
+                    for (var j = 0; j < lines.length; ) {
+                        var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
+                        var chunk = lines.slice(j, j + maxLines);
+                        doc.text(chunk, 30, yPos);
+                        yPos += maxLines * lineHeight;
+                        j += maxLines;
+        
+                        if (j < lines.length) {
+                            doc.addPage();
+                            yPos = 40; // Reset yPos for the new page
+                            remainingSpace = pageHeight - 60; // Adjust for margins
+                        }
+                    }
                 }
-    
+        
                 doc.save("responses.pdf");
             });
         });
+        
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var disapproveBtn = document.getElementById("generatePdf");
@@ -75,9 +100,17 @@
         
                 var liveResponses = document.querySelectorAll('[id="live-response"]');
                 var userInputFields = document.querySelectorAll('[id="user-input"]');
-                var doc = new window.jspdf.jsPDF();
-                var yPos = 10;
-                var lineHeight = 10;
+        
+                var doc = new window.jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter' // Adjust this based on your requirements
+                });
+                
+                var yPos = 40; // Start yPos at 40 to account for margins
+                var lineHeight = 20; // Adjust this value based on your font size and content
+                var pageHeight = doc.internal.pageSize.height;
+                var isFirstPage = true;
         
                 // Print all disapproval reasons first
                 var allDisapprovalReasons = '';
@@ -92,31 +125,51 @@
                 yPos += (disapprovalLines.length * lineHeight) + 20;
         
                 // Print user inputs and live responses after disapproval reasons
-                for (var i = 0; i < (liveResponses.length+1)/2 -1; i++) {
+                for (var i = 0; i < (liveResponses.length+1)/2 -1 ; i++) {
                     var liveResponseText = liveResponses[i].value || liveResponses[i].innerText;
                     var userInputText = userInputFields[i].value || userInputFields[i].innerText;
-                    var combinedText = "User Input: " + userInputText + "\nLive Response: " + liveResponseText;
         
-                    var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 20);
-                    var combinedLines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 20);
+                    var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
         
-                    if (yPos + combinedLines.length * lineHeight > doc.internal.pageSize.height - 20) {
+                    var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+                    var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+        
+                    var remainingSpace = pageHeight - yPos - 20;
+        
+                    if (!isFirstPage && lines.length * lineHeight > remainingSpace) {
                         doc.addPage();
-                        yPos = 10;
+                        yPos = 40; // Reset yPos for the new page
+                        isFirstPage = false;
+                        remainingSpace = pageHeight - 60; // Adjust for margins
                     }
         
-                    doc.text(combinedLines, 10, yPos);
-                    yPos += (combinedLines.length * lineHeight) + 10;
+                    for (var j = 0; j < lines.length; ) {
+                        var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
+                        var chunk = lines.slice(j, j + maxLines);
+                        doc.text(chunk, 30, yPos);
+                        yPos += maxLines * lineHeight;
+                        j += maxLines;
+        
+                        if (j < lines.length) {
+                            doc.addPage();
+                            yPos = 40; // Reset yPos for the new page
+                            remainingSpace = pageHeight - 60; // Adjust for margins
+                        }
+                    }
                 }
-                
+        
                 doc.save("responses.pdf");
-                checkboxesDiv.style.display = "none";
             });
         });
         
     </script>
 
     <style>
+        .message-container {
+            border: 1px solid #ccc; /* Border style, width, and color */
+            padding: 10px; /* Optional: Add some padding for better spacing */
+            margin-bottom: 10px; /* Optional: Add margin between each container */
+        }
         .fixed-buttons {
             position: fixed;
         }
@@ -294,9 +347,10 @@
         }
         }
     </style>
-
-        
+    
 </head>
+
+
 <body  class="dashboard-container">
     <nav id="sidebar">
         <div class="float-top">
@@ -308,97 +362,48 @@
             </div>
             <ul class="conversations">
                 <li class="grouping">Today</li>
-                <li class="active">
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
+                {% for chat in previous_chats_today %}
+                    <li>
+                        <button class="conversation-button">
+                            <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                        </button>
+                        <div class="fade"></div>
+                        <div class="edit-buttons">
+                            <button><i class="fa fa-edit"></i></button>
+                            <button><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li>
+                {% endfor %}
+            
                 <li class="grouping">Yesterday</li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i>Make your design looks more .....</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li class="grouping">Previous 7 days</li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> This is a conversation title</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
-                <li>
-                    <button class="conversation-button"><i class="fa fa-message fa-regular"></i> Make your design looks more .....</button>
-                    <div class="fade"></div>
-                    <div class="edit-buttons">
-                        <button><i class="fa fa-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </div>
-                </li>
+                {% for chat in previous_chats_yesterday %}
+                    <li>
+                        <button class="conversation-button">
+                            <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                        </button>
+                        <div class="fade"></div>
+                        <div class="edit-buttons">
+                            <button><i class="fa fa-edit"></i></button>
+                            <button><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li>
+                {% endfor %}
+            
+                <li class="grouping">Previous days</li>
+                {% for chat in previous_chats %}
+                    <li>
+                        <button class="conversation-button">
+                            <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                        </button>
+                        <div class="fade"></div>
+                        <div class="edit-buttons">
+                            <button><i class="fa fa-edit"></i></button>
+                            <button><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
+            
         </div>
         <div class="user-menu">
             <button>
@@ -493,13 +498,13 @@
         </div>
     </div>
 
-    <main style="display: flex; flex-direction: column; height: 100%;">
+    <main style="display: flex; flex-direction: column; height: 100%; margin: 0 10%;">
         <div class="view new-chat-view" style="overflow-y: auto;">
             <!-- Top Div -->
             <div class="model-selector" style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="margin: 0 auto;">Default (GPT-3.5)</div>
-                <div class="model-selector-icon" style="display: flex; justify-content: flex-end;">
-                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: auto;">
+                <div style="margin: 0;">Default (GPT-3.5)</div>
+                <div class="model-selector-icon" style="margin-left: auto;">
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <img src="{% static  'image/Ellipse 5.png' %}" alt="">
                     </button>
                 </div>
@@ -625,8 +630,11 @@
                     var userMsgElement = $('<div id="user-input"></div>').text(data.data.usermsg);
                     var displayMsgElement = $('<div id="live-response"></div>').html(data.data.display_msg);
                     var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
+
+                    userMsgElement.css('border', '1px solid #000'); // Customize the border color, style, and width
+                    displayMsgElement.css('border', '1px solid #000');
                     // Append user input and response to the container
-                    container.append('<span class="ml-5"></span>', userElement, userMsgElement, '<br>', displayMsgElement, '<br>', '<br>');
+                    container.append('<span class="ml-5"></span>', userElement, userMsgElement, '<br>', displayMsgElement, '<br>');
                     
                     // Append the container to the main container
                     $('.container').append(container);

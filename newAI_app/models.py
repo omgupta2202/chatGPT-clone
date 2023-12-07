@@ -57,6 +57,23 @@ class ChatHistory(models.Model):
     def __str__(self):
         return f'{self.user} - {self.date_created}'
 
+class ChatLog(models.Model):
+    title = models.CharField(max_length=100)
+    start_time = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.start_time}"
+
+class ChatMessage(models.Model):
+    chat_log = models.ForeignKey(ChatLog, related_name='messages', on_delete=models.CASCADE)
+    content = models.TextField()
+    time = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.time}"
+
 
 
 class PromptHistory(models.Model):
@@ -72,5 +89,3 @@ class FeedBack(models.Model):
 
     def __str__(self):
         return str(self.resion)
-
-

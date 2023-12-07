@@ -333,8 +333,9 @@ main .view {
     display: flex;
     padding: 4px;
     gap: 4px;
-    margin: 24px auto;
     z-index: 2;
+    justify-content: space-between; /* Keep justify-content as space-between */
+    margin: 24px auto;
     
 }
 

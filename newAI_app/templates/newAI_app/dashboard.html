@@ -16,154 +16,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('message').addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    document.querySelector('.send-button').click();
-                }
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var approveBtn = document.getElementById("hideElement");
-        
-            approveBtn.addEventListener("click", function() {
-                var liveResponses = document.querySelectorAll('[id="live-response"]');
-                var userInputFields = document.querySelectorAll('[id="user-input"]');
-        
-                var doc = new window.jspdf.jsPDF({
-                    orientation: 'portrait',
-                    unit: 'pt',
-                    format: 'letter' // Adjust this based on your requirements
-                });
-                
-                var yPos = 40; // Start yPos at 40 to account for margins
-                var lineHeight = 20; // Adjust this value based on your font size and content
-                var pageHeight = doc.internal.pageSize.height;
-                var isFirstPage = true;
-        
-                // Assuming liveResponses and userInputFields have the same length
-                for (var i = 0; i < (liveResponses.length+1)/2 -1 ; i++) {
-                    var liveResponseText = liveResponses[i].value || liveResponses[i].innerText;
-                    var userInputText = userInputFields[i].value || userInputFields[i].innerText;
-        
-                    var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
-        
-                    var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
-                    var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
-        
-                    var remainingSpace = pageHeight - yPos - 20;
-        
-                    if (!isFirstPage && lines.length * lineHeight > remainingSpace) {
-                        doc.addPage();
-                        yPos = 40; // Reset yPos for the new page
-                        isFirstPage = false;
-                        remainingSpace = pageHeight - 60; // Adjust for margins
-                    }
-        
-                    for (var j = 0; j < lines.length; ) {
-                        var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
-                        var chunk = lines.slice(j, j + maxLines);
-                        doc.text(chunk, 30, yPos);
-                        yPos += maxLines * lineHeight;
-                        j += maxLines;
-        
-                        if (j < lines.length) {
-                            doc.addPage();
-                            yPos = 40; // Reset yPos for the new page
-                            remainingSpace = pageHeight - 60; // Adjust for margins
-                        }
-                    }
-                }
-        
-                doc.save("responses.pdf");
-            });
-        });
-        
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var disapproveBtn = document.getElementById("generatePdf");
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            var disapproveReasons = document.getElementById("checkboxes");
-            var checkboxesDiv = document.getElementById("checkboxes");
-
-        
-            disapproveBtn.addEventListener("click", function() {
-                var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
-                    return checkbox.checked;
-                });
-        
-                var liveResponses = document.querySelectorAll('[id="live-response"]');
-                var userInputFields = document.querySelectorAll('[id="user-input"]');
-        
-                var doc = new window.jspdf.jsPDF({
-                    orientation: 'portrait',
-                    unit: 'pt',
-                    format: 'letter' // Adjust this based on your requirements
-                });
-                
-                var yPos = 40; // Start yPos at 40 to account for margins
-                var lineHeight = 20; // Adjust this value based on your font size and content
-                var pageHeight = doc.internal.pageSize.height;
-                var isFirstPage = true;
-        
-                // Print all disapproval reasons first
-                var allDisapprovalReasons = '';
-                for (var i = 0; i < selectedCheckboxes.length; i++) {
-                    allDisapprovalReasons += "Disapprove: " + selectedCheckboxes[i].value + "\n\n";
-                }
-        
-                var splitDisapprovalText = doc.splitTextToSize(allDisapprovalReasons, doc.internal.pageSize.width - 20);
-                var disapprovalLines = doc.splitTextToSize(splitDisapprovalText, doc.internal.pageSize.width - 20);
-        
-                doc.text(disapprovalLines, 10, yPos);
-                yPos += (disapprovalLines.length * lineHeight) + 20;
-        
-                // Print user inputs and live responses after disapproval reasons
-                for (var i = 0; i < (liveResponses.length+1)/2 -1 ; i++) {
-                    var liveResponseText = liveResponses[i].value || liveResponses[i].innerText;
-                    var userInputText = userInputFields[i].value || userInputFields[i].innerText;
-        
-                    var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
-        
-                    var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
-                    var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
-        
-                    var remainingSpace = pageHeight - yPos - 20;
-        
-                    if (!isFirstPage && lines.length * lineHeight > remainingSpace) {
-                        doc.addPage();
-                        yPos = 40; // Reset yPos for the new page
-                        isFirstPage = false;
-                        remainingSpace = pageHeight - 60; // Adjust for margins
-                    }
-        
-                    for (var j = 0; j < lines.length; ) {
-                        var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
-                        var chunk = lines.slice(j, j + maxLines);
-                        doc.text(chunk, 30, yPos);
-                        yPos += maxLines * lineHeight;
-                        j += maxLines;
-        
-                        if (j < lines.length) {
-                            doc.addPage();
-                            yPos = 40; // Reset yPos for the new page
-                            remainingSpace = pageHeight - 60; // Adjust for margins
-                        }
-                    }
-                }
-        
-                doc.save("responses.pdf");
-            });
-        });
-        
-    </script>
-
     <style>
         .message-container {
             border: 1px solid #ccc; /* Border style, width, and color */
@@ -420,7 +272,6 @@
         </div>
     </nav>
 
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
         <div class="modal-dialog">
@@ -499,20 +350,21 @@
     </div>
 
     <main style="display: flex; flex-direction: column; height: 100%; margin: 0 10%;">
-        <div class="view new-chat-view" style="overflow-y: auto;">
+        <div class="view new-chat-view" >
             <!-- Top Div -->
-            <div class="model-selector" style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="margin: 0;">Default (GPT-3.5)</div>
-                <div class="model-selector-icon" style="margin-left: auto;">
+            <div class="model-selector">
+                <div>Default (GPT-3.5)</div>
+                <div class="model-selector-icon">
                     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <img src="{% static  'image/Ellipse 5.png' %}" alt="">
                     </button>
                 </div>
             </div>
         </div>
+        
     
         <!-- Middle Div -->
-        <div class="view conversation-view" style="flex-grow: 1; margin-bottom: 10vh;">
+        <div class="view conversation-view" style="flex-grow: 1; margin-bottom: 10vh;overflow-y: auto;">
             <div class="container text-left" style="color: black;"></div>
         </div>
     
@@ -521,10 +373,14 @@
             <div class="message-wrapper">
                 <form id="messageForm" method="post">{% csrf_token %}
                     <textarea id="message" rows="1" name="user-prompt" placeholder="Send a message"></textarea>
+                    
                     <button type="submit" class="send-button">
                         <i class="fa fa-paper-plane"></i>
                     </button>
                 </form>
+            </div>
+            <div class="loading-overlay">
+                <div class="spinner"></div>
             </div>
             <div class="">
                 <button class="btn btn-success" id="hideElement">Approve</button>
@@ -543,70 +399,70 @@
         </div>
     </main>
 
-   <script>
-    const sidebar = document.querySelector("#sidebar");
-    const hide_sidebar = document.querySelector(".hide-sidebar");
-    const new_chat_button = document.querySelector(".new-chat");
+    <script>
+        const sidebar = document.querySelector("#sidebar");
+        const hide_sidebar = document.querySelector(".hide-sidebar");
+        const new_chat_button = document.querySelector(".new-chat");
 
-    hide_sidebar.addEventListener( "click", function() {
-        sidebar.classList.toggle( "hidden" );
-    } );
+        hide_sidebar.addEventListener( "click", function() {
+            sidebar.classList.toggle( "hidden" );
+        } );
 
-    const user_menu = document.querySelector(".user-menu ul");
-    const show_user_menu = document.querySelector(".user-menu button");
+        const user_menu = document.querySelector(".user-menu ul");
+        const show_user_menu = document.querySelector(".user-menu button");
 
-    show_user_menu.addEventListener( "click", function() {
-        if( user_menu.classList.contains("show") ) {
-            user_menu.classList.toggle( "show" );
-            setTimeout( function() {
-                user_menu.classList.toggle( "show-animate" );
-            }, 200 );
-        } else {
-            user_menu.classList.toggle( "show-animate" );
-            setTimeout( function() {
+        show_user_menu.addEventListener( "click", function() {
+            if( user_menu.classList.contains("show") ) {
                 user_menu.classList.toggle( "show" );
-            }, 50 );
+                setTimeout( function() {
+                    user_menu.classList.toggle( "show-animate" );
+                }, 200 );
+            } else {
+                user_menu.classList.toggle( "show-animate" );
+                setTimeout( function() {
+                    user_menu.classList.toggle( "show" );
+                }, 50 );
+            }
+        } );
+
+        const models = document.querySelectorAll(".model-selector button");
+
+        for( const model of models ) {
+            model.addEventListener("click", function() {
+                document.querySelector(".model-selector button.selected")?.classList.remove("selected");
+                model.classList.add("selected");
+            });
         }
-    } );
 
-    const models = document.querySelectorAll(".model-selector button");
+        const message_box = document.querySelector("#message");
 
-    for( const model of models ) {
-        model.addEventListener("click", function() {
-            document.querySelector(".model-selector button.selected")?.classList.remove("selected");
-            model.classList.add("selected");
+        message_box.addEventListener("keyup", function() {
+            message_box.style.height = "auto";
+            let height = message_box.scrollHeight + 2;
+            if( height > 200 ) {
+                height = 200;
+            }
+            message_box.style.height = height + "px";
         });
-    }
 
-    const message_box = document.querySelector("#message");
+        function show_view( view_selector ) {
+            document.querySelectorAll(".view").forEach(view => {
+                view.style.display = "none";
+            });
 
-    message_box.addEventListener("keyup", function() {
-        message_box.style.height = "auto";
-        let height = message_box.scrollHeight + 2;
-        if( height > 200 ) {
-            height = 200;
+            document.querySelector(view_selector).style.display = "flex";
         }
-        message_box.style.height = height + "px";
-    });
 
-    function show_view( view_selector ) {
-        document.querySelectorAll(".view").forEach(view => {
-            view.style.display = "none";
+        new_chat_button.addEventListener("click", function() {
+            show_view( ".new-chat-view" );
         });
 
-        document.querySelector(view_selector).style.display = "flex";
-    }
-
-    new_chat_button.addEventListener("click", function() {
-        show_view( ".new-chat-view" );
-    });
-
-    document.querySelectorAll(".conversation-button").forEach(button => {
-    button.addEventListener("click", function() {
-        show_view( ".conversation-view" );
-    })
-});
-   </script>
+        document.querySelectorAll(".conversation-button").forEach(button => {
+            button.addEventListener("click", function() {
+                show_view( ".conversation-view" );
+            })
+        });
+    </script>
 
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -615,6 +471,7 @@
 
         // Function to send a message asynchronously
         function sendMessage(message) {
+            $('.loading-overlay').show();
             $.ajax({
                 type: 'POST',
                 url: '/home',  // Update this with your Django view endpoint
@@ -622,26 +479,52 @@
                     'user-prompt': message,
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
-                success: function (data) {
-                    // Create a container for each pair of user input and response
-                    var container = $('<div class="message-container"></div>');
-                    
-                    // Create elements for user input and response
-                    var userMsgElement = $('<div id="user-input"></div>').text(data.data.usermsg);
-                    var displayMsgElement = $('<div id="live-response"></div>').html(data.data.display_msg);
-                    var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
-
-                    userMsgElement.css('border', '1px solid #000'); // Customize the border color, style, and width
-                    displayMsgElement.css('border', '1px solid #000');
-                    // Append user input and response to the container
-                    container.append('<span class="ml-5"></span>', userElement, userMsgElement, '<br>', displayMsgElement, '<br>');
-                    
-                    // Append the container to the main container
-                    $('.container').append(container);
                 
-                    // Clear the input field after sending the message
+                success: function (data) {
+                    $('.loading-overlay').hide();
+                    var container = $('<div class="message-container"></div>');
+                    var userMsgElement = $('<div id="user-input"></div>').html(data.data.usermsg.replace(/\n/g, '<br>'));
+                    var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
+                
+                    userMsgElement.css('border', '1px solid #000'); // Customize the border color, style, and width
+                
+                    container.append('<span class="ml-5"></span>', userElement, userMsgElement, '<br>');
+                
+                    var displayMsgElement = $('<div id="live-response"></div>'); // Response container
+                
+                    // Check if the response contains numbered points
+                    var hasNumberedPoints = /\d+\./.test(data.data.display_msg);
+                
+                    if (hasNumberedPoints) {
+                        var points = [];
+                
+                        // Check if the response is an array of points or a string
+                        if (Array.isArray(data.data.display_msg)) {
+                            points = data.data.display_msg; // Use the provided array of points
+                        } else {
+                            points = data.data.display_msg.split(/\d+\.\s+/).filter(Boolean); // Split by numbered points
+                        }
+                
+                        // Display each point with a number
+                        points.forEach(function(point, index) {
+                            var numberedPoint = $('<div></div>').text((index + 1) + '. ' + point.trim());
+                            displayMsgElement.append(numberedPoint, '<br>'); // Append each numbered point with a line break
+                        });
+                    } else {
+                        // If no numbered points, display the response as is
+                        displayMsgElement.text(data.data.display_msg);
+                    }
+                
+                    container.append(displayMsgElement, '<br>'); // Append the formatted response to the container
+                
+                    $('.container').append(container);
                     $('#message').val('');
                 },
+                complete: function() {
+                    // Ensure the loading overlay is hidden even if the request fails
+                    $('.loading-overlay').hide();
+                },
+                
             });
         }
 
@@ -654,19 +537,176 @@
 
     </script>
 
-
+    
     <script>
         $(document).ready(function(){
         $("#hideElement").click(function(){
             $("#checkboxes").hide();
         });
-        $("#showElement").click(function(){
-            $("#checkboxes").show();
         });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle checkboxes visibility
+            function toggleCheckboxes() {
+                var checkboxes = document.getElementById('checkboxes');
+                checkboxes.style.display = checkboxes.style.display === 'none' ? 'block' : 'none';
+            }
+        
+            // Event listener for the "Disapprove" button
+            document.getElementById('showElement').addEventListener('click', function() {
+                toggleCheckboxes();
+            });
+        
+            // Event listener for clicking "Approve" button to hide checkboxes
+            document.getElementById('hideElement').addEventListener('click', function() {
+                document.getElementById('checkboxes').style.display = 'none';
+            });
+        });
+        
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('message').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    document.querySelector('.send-button').click();
+                } else if (event.key === 'Enter' && event.shiftKey) {
+                    var message = document.getElementById('message');
+                    var cursorPosition = message.selectionStart;
+                    var textBeforeCursor = message.value.substring(0, cursorPosition);
+                    var textAfterCursor = message.value.substring(cursorPosition, message.value.length);
+                    message.value = textBeforeCursor + '\n' + textAfterCursor;
+                    message.selectionStart = cursorPosition + 1;
+                    message.selectionEnd = cursorPosition + 1;
+                    event.preventDefault();
+                }
+            });
         });
     </script>
 
-    
+    <!-- Approve -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var approveBtn = document.getElementById("hideElement");
+        
+            approveBtn.addEventListener("click", function() {
+                var liveResponses = document.querySelectorAll('[id="live-response"]');
+                var userInputFields = document.querySelectorAll('[id="user-input"]');
+        
+                var doc = new window.jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter' // Adjust this based on your requirements
+                });
+                
+                var yPos = 40; // Start yPos at 40 to account for margins
+                var lineHeight = 20; // Adjust this value based on your font size and content
+                var pageHeight = doc.internal.pageSize.height;
+                var lastIndex = liveResponses.length - 1; // Index of the last pair
+                var liveResponseText = liveResponses[lastIndex].value || liveResponses[lastIndex].innerText;
+                var userInputText = userInputFields[lastIndex].value || userInputFields[lastIndex].innerText;
+                
+                doc.text("Approved", 30, yPos);
+                yPos += lineHeight * 2; 
+
+                var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
+        
+                var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+                var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+        
+                var remainingSpace = pageHeight - yPos - 20;
+        
+                for (var j = 0; j < lines.length; ) {
+                    var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
+                    var chunk = lines.slice(j, j + maxLines);
+                    doc.text(chunk, 30, yPos);
+                    yPos += maxLines * lineHeight;
+                    j += maxLines;
+        
+                    if (j < lines.length) {
+                        doc.addPage();
+                        yPos = 40; // Reset yPos for the new page
+                        remainingSpace = pageHeight - 60; // Adjust for margins
+                    }
+                }
+        
+                doc.save("responses.pdf");
+            });
+        });
+        
+    </script>
+
+    <!-- Disapprove -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var disapproveBtn = document.getElementById("generatePdf");
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var disapproveReasons = document.getElementById("checkboxes");
+            var checkboxesDiv = document.getElementById("checkboxes");
+        
+            disapproveBtn.addEventListener("click", function() {
+                var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
+                    return checkbox.checked;
+                });
+        
+                var liveResponses = document.querySelectorAll('[id="live-response"]');
+                var userInputFields = document.querySelectorAll('[id="user-input"]');
+        
+                var doc = new window.jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter' // Adjust this based on your requirements
+                });
+        
+                var yPos = 40; // Start yPos at 40 to account for margins
+                var lineHeight = 20; // Adjust this value based on your font size and content
+                var pageHeight = doc.internal.pageSize.height;
+                var lastIndex = liveResponses.length - 1; // Index of the last pair
+        
+                // Print all disapproval reasons first
+                var allDisapprovalReasons = '';
+                for (var i = 0; i < selectedCheckboxes.length; i++) {
+                    allDisapprovalReasons += "Disapprove: " + selectedCheckboxes[i].value + "\n\n";
+                }
+        
+                var splitDisapprovalText = doc.splitTextToSize(allDisapprovalReasons, doc.internal.pageSize.width - 20);
+                var disapprovalLines = doc.splitTextToSize(splitDisapprovalText, doc.internal.pageSize.width - 20);
+        
+                doc.text(disapprovalLines, 30, yPos);
+                yPos += (disapprovalLines.length * lineHeight) + 20;
+        
+                // Print only the last user input and live response
+                var liveResponseText = liveResponses[lastIndex].value || liveResponses[lastIndex].innerText;
+                var userInputText = userInputFields[lastIndex].value || userInputFields[lastIndex].innerText;
+        
+                var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
+        
+                var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+                var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+        
+                var remainingSpace = pageHeight - yPos - 20;
+        
+                for (var j = 0; j < lines.length; ) {
+                    var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
+                    var chunk = lines.slice(j, j + maxLines);
+                    doc.text(chunk, 30, yPos);
+                    yPos += maxLines * lineHeight;
+                    j += maxLines;
+        
+                    if (j < lines.length) {
+                        doc.addPage();
+                        yPos = 40; // Reset yPos for the new page
+                        remainingSpace = pageHeight - 60; // Adjust for margins
+                    }
+                }
+        
+                doc.save("responses.pdf");
+            });
+        });
+        
+        
+    </script>
 
    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>

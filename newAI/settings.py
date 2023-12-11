@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+CORS_ALLOW_ALL_ORIGINS= True
+CSRF_TRUSTED_ORIGINS = ['https://f49a-125-21-249-98.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS = [

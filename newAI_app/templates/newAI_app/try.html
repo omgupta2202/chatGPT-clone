@@ -616,10 +616,7 @@
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
                 success: function (data) {
-                    // Create a container for each pair of user input and response
                     var container = $('<div class="message-container"></div>');
-                    
-                    // Create elements for user input and response
                     var userMsgElement = $('<div id="user-input"></div>').text(data.data.usermsg);
                     var displayMsgElement = $('<div id="live-response"></div>').html(data.data.display_msg);
                     var userElement = $('<div id="user-firstname"></div>').text(data.data.user);

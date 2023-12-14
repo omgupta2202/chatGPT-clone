@@ -9,22 +9,22 @@ html, body {
     --color-white: #fff;
     --color-main: rgb(255, 255, 255);
     --color-main-fade: #2c2d3000;
-    --color-secondary: rgb(14, 12, 17);
+    --color-secondary: rgb(35, 35, 35);
     --color-secondary-fade: #17171700;
-    --color-button-hover:rgba(15, 5, 36, 1);
+    --color-button-hover:rgb(91, 89, 94);
     --color-button-hover-fade: #0052cd00;
     --color-user-icon: #8e0000;
-    --color-groupings: #9ca6b5;
+    --color-groupings: #eeeeee;
     --color-gpt-icon: #000000;
     --color-black: #1e1e1f;
-    --color-user-menu-hover: rgba(35, 16, 75, 1);
+    --color-user-menu-hover: rgb(101, 90, 126);
     --color-text: #f5f9ff;
     --color-gpt3: #5fc319;
     --color-gpt4: #f22626;
     --color-secondary-p: #c9ccd1;
     --color-logo: #848484;
     --color-model-name: #ffffff;
-    --color-assistant-bg: rgba(15, 5, 36, 1);
+    --color-assistant-bg: rgb(204, 204, 204);
     --color-assistant-text: #e1e6ed;
     --color-disclaimer: #d0d2e1;
     --color-border1: #484a4e;
@@ -52,12 +52,14 @@ html, body {
     justify-content: space-between;
     flex-direction: column;
     transition: all 0.2s ease-in-out;
+    color: #FFFFFF; /* Set text color to white */
 }
 
 .float-top {
     display: flex;
     flex-direction: column;
-    height: calc( 100% - 50px );
+    flex: 1; /* Occupy available space */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
 }
 
 #sidebar.hidden {
@@ -69,7 +71,18 @@ html, body {
     left: 60px;
     transform: rotate(180deg);
     padding: 15px 13px 11px 13px;
+    background: grey;
 }
+#sidebar.hidden .hide-sidebar-btn {
+    left: 60px;
+    transform: rotate(180deg);
+    padding: 15px 13px 11px 13px;
+    background: grey;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
 
 button {
     display: block;
@@ -237,7 +250,6 @@ i.user-icon {
     float: right;
     opacity: 0.7;
 }
-
 .user-menu > ul,
 .user-menu li {
     list-style: none;
@@ -268,24 +280,40 @@ i.user-icon {
     margin-top: -8px;
 }
 
-.user-menu li button {
+.user-menu li button,
+.user-menu li a {
     border-radius: 0;
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: var(--color-text); /* Define your text color */
+    font-size: 14px;
+    font-weight: 400;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-.user-menu li button:hover {
+.user-menu li button:hover,
+.user-menu li a:hover {
     background: var(--color-user-menu-hover);
 }
 
-.user-menu li:first-child button {
+.user-menu li:first-child button,
+.user-menu li:first-child a {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-.user-menu li:last-child button {
+.user-menu li:last-child button,
+.user-menu li:last-child a {
     border-top: 1px solid var(--color-user-menu-border);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
+
 
 ::-webkit-scrollbar {
     width: 9px;
@@ -333,21 +361,20 @@ main .view {
     align-items: center;
     border-radius: 11px;
     /* background: var(--color-secondary); */
-
-    padding: 4px;
-    gap: 4px;
-    z-index: 2;
-    margin: 24px auto;
+    margin: 24px;
     
 }
 
 .model-selector > button {
     border-radius: 9px;
-
     width: 150px;
     border: none;
     font-weight: bold;
     opacity: 0.5;
+}
+
+.model-selector-text {
+    margin-left: auto;
 }
 
 .model-selector-icon {
@@ -460,9 +487,9 @@ p.secondary {
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
-    max-width: 850px;
+    max-width: 50vw; /* Adjust the percentage as needed */
     text-align: center;
-    padding: 0px 45px 0 45px;
+    padding: 0; /* Adjust padding as needed */
     box-shadow: var(--color-main) 0 0 50px;
 }
 

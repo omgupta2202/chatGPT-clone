@@ -26,10 +26,10 @@
             position: fixed;
         }
 
-        #message-form {
-            position: fixed; /* or 'absolute', depending on your layout requirements */
-            bottom: 0;
-            width: 100%;
+        @media (max-width: 768px) {
+            #message-form {
+                max-width: 300px; /* Adjust this value as needed */
+            }
         }
 
         .edit-profile-head{
@@ -74,7 +74,7 @@
         color: #494949;
         }
         .modal-dialog {
-         max-width: 60% !important;
+         max-width: 40% !important;
         }
 
         .edit-profile-form{
@@ -189,7 +189,10 @@
         }
 
         .modal-body {
-            padding: 0;
+            padding: 10;
+        }
+        #container-profile{
+            padding: 30;
         }
 
 
@@ -208,152 +211,142 @@
         <div class="float-top">
             <div class="sidebar-controls">
                 <button class="new-chat"><i class="fa fa-plus"></i> New chat</button>
-                <button class="hide-sidebar">
-                    <img src="{% static 'image/add-post 1.svg' %}" alt="">
-                </button>
             </div>
             <ul class="conversations">
+                
                 <li class="grouping">Today</li>
                 {% for chat in previous_chats_today %}
-                    <li>
+                    <li id="chat-{{ chat.id }}">
                         <button class="conversation-button">
                             <i class="fa fa-message fa-regular"></i> {{ chat.title }}
                         </button>
                         <div class="fade"></div>
                         <div class="edit-buttons">
-                            <button><i class="fa fa-edit"></i></button>
-                            <button><i class="fa fa-trash"></i></button>
+                            <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
                         </div>
                     </li>
+                {% empty %}
+                    <li>No chats today</li>
                 {% endfor %}
             
                 <li class="grouping">Yesterday</li>
                 {% for chat in previous_chats_yesterday %}
-                    <li>
+                    <li id="chat-{{ chat.id }}">
                         <button class="conversation-button">
                             <i class="fa fa-message fa-regular"></i> {{ chat.title }}
                         </button>
                         <div class="fade"></div>
                         <div class="edit-buttons">
-                            <button><i class="fa fa-edit"></i></button>
-                            <button><i class="fa fa-trash"></i></button>
+                            <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
                         </div>
                     </li>
+                {% empty %}
+                    <li>No chats yesterday</li>
                 {% endfor %}
             
                 <li class="grouping">Previous days</li>
                 {% for chat in previous_chats %}
-                    <li>
+                    <li id="chat-{{ chat.id }}">
                         <button class="conversation-button">
                             <i class="fa fa-message fa-regular"></i> {{ chat.title }}
                         </button>
                         <div class="fade"></div>
                         <div class="edit-buttons">
-                            <button><i class="fa fa-edit"></i></button>
-                            <button><i class="fa fa-trash"></i></button>
+                            <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
                         </div>
                     </li>
+                {% empty %}
+                    <li>No previous chats</li>
+                {% endfor %}
+            </ul>
+            <ul class="chat-titles">
+                <!-- Dynamically populated chat titles -->
+                {% for chat in chat_titles %}
+                <li id="chat-{{ chat.id }}">
+                    <button class="conversation-button" onclick="loadConversation({{ chat.id }})">
+                        <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                    </button>
+                </li>
                 {% endfor %}
             </ul>
             
         </div>
         <div class="user-menu">
-            <button>
-                <!-- <i class="user-icon">u</i>
-                username
-                <i class="fa fa-ellipsis dots"></i> -->
+            <button class="hide-sidebar">
+                <   Hide Sidebar
+            </button>
+            <button class="options">
+                <i class="user-icon">u</i>
+                User
+                <i class="fa fa-ellipsis dots"></i>
             </button>
             <ul>
-                <li><button>My plan</button></li>
+                {% comment %} <li><button>My plan</button></li>
                 <li><button>Custom instructions</button></li>
-                <li><button>Settings &amp; Beta</button></li>
-                <li><button>Log out</button></li>
+                <li><button>Settings &amp; Beta</button></li> {% endcomment %}
+                <li><a href="{% url 'logout' %}">Log out</a>
             </ul>
         </div>
     </nav>
 
-    <!-- Modal -->
+    <!-- Profile -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
         <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel edit-heading">User: suriya</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body edit-form-body">
-                <div class="container">
-                    <div class="row pt-4">
-                          <div class="col-md-3 edit-form-left">
-                           <img src="{% static 'image/editProfile.png' %}" alt="" class="img-fluid">
-                          </div>
-                          <div class="col-md-9 edit-form-right">
-                           <h1 class="edit-profile-head">suriya</h1>
-                            <div class="drop-zone">
-                                <span class="drop-zone__prompt">Drop your File here or Click in this area</span>
-                                <input type="file" name="myFile" class="drop-zone__input">
-                            </div>
-
-
-                            <p class="edit-profile-para">Avatar by newai.com <span class="edit-span">Or upload your won..</span> </p>
-                          </div>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel edit-heading">User: {{ user.username }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                     <form class="edit-profile-form">
-                          <div class="form-group row  form-head " >
-                             <label for="inputPassword" class="col-sm-4 col-form-label edit-label">User Name</label>
-                             <div class="col-sm-8">
-                               <input type="text" class="form-control edit-input" id="User Name" placeholder="Surya">
-                             </div>
-                           </div>
-                           <div class="form-group row form-head">
-                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Email</label>
-                               <div class="col-sm-8">
-                                 <input type="text" class="form-control edit-input" id="Email" placeholder="suriya@gmail.com">
-                               </div>
-                             </div>
-                             <div class="form-group row form-head">
-                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Password</label>
-                               <div class="col-sm-8">
-                                 <input type="password" class="form-control edit-input" id="inputPassword" placeholder="Password">
-                               </div>
-                             </div>
-                             <div class="form-group row form-head">
-                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Full Name</label>
-                               <div class="col-sm-8">
-                                 <input type="text" class="form-control edit-input" id="Full Name" placeholder="Suriya Doe">
-                               </div>
-                             </div>
-                             <div class="form-group row form-head">
-                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Title</label>
-                               <div class="col-sm-8">
-                                 <input type="text" class="form-control edit-input" id="Title" placeholder="Administrator">
-                               </div>
-                             </div>
-                             <div class="form-group row form-head">
-                               <label for="inputPassword" class="col-sm-4 col-form-label edit-label">Language</label>
-                               <div class="col-sm-8">
-                                   <select class="form-select edit-select" aria-label="Default select example">
-                                       <option selected>English</option>
-                                       <option value="1">One</option>
-                                       <option value="2">Two</option>
-                                       <option value="3">Three</option>
-                                     </select>
-                               </div>
-                             </div>
-
-                     </form>
-                     <button class="edit-profile-button">Save Profile</button>
+                <div class="modal-body edit-form-body">
+                    <div class="container-profile">
+                        <div class="row pt-4" >
+                            <div class="col-md-2 edit-form-left">
+                                <img src="{% static 'image/editProfile.png' %}" alt="" class="img-fluid">
+                            </div>
+                            <div class="col-md-9 edit-form-right">
+                                <h1 class="edit-profile-head">{{ user.username }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="edit-profile-form" method="post" action="{% url 'edit_profile' %}">
+                        {% csrf_token %}
+                        <div class="form-group row form-head">
+                            <label for="username" class="col-sm-4 col-form-label edit-label">User Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="username" name="username" value="{{ user.username }}">
+                            </div>
+                        </div>
+                        <div class="form-group row form-head">
+                            <label for="email" class="col-sm-4 col-form-label edit-label">Email</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="email" name="email" value="{{ user.email }}">
+                            </div>
+                        </div>
+                        <div class="form-group row form-head">
+                            <label for="first_name" class="col-sm-4 col-form-label edit-label">First Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="first_name" name="first_name" value="{{ user.first_name }}">
+                            </div>
+                        </div>
+                        <div class="form-group row form-head">
+                            <label for="last_name" class="col-sm-4 col-form-label edit-label">Last Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="last_name" name="last_name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="edit-profile-button">Save Profile</button>
+                    </form>
+                </div>
             </div>
-
-        </div>
         </div>
     </div>
 
+    <!-- Conversations -->
     <main style="display: flex; flex-direction: column; height: 100%; margin: 0 10%;">
         <div class="view new-chat-view" >
             <!-- Top Div -->
             <div class="model-selector">
-                <div>Default (GPT-3.5)</div>
+                <div class="model-selector-text">Default (GPT-3.5)</div>
                 <div class="model-selector-icon">
                     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <img src="{% static  'image/Ellipse 5.png' %}" alt="">
@@ -362,9 +355,10 @@
             </div>
         </div>
         
-    
+        
         <!-- Middle Div -->
         <div class="view conversation-view" style="flex-grow: 1; margin-bottom: 10vh;overflow-y: auto;">
+            
             <div class="container text-left" style="color: black;"></div>
         </div>
     
@@ -399,6 +393,7 @@
         </div>
     </main>
 
+    <!-- Display Hide Sidebar -->
     <script>
         const sidebar = document.querySelector("#sidebar");
         const hide_sidebar = document.querySelector(".hide-sidebar");
@@ -409,7 +404,7 @@
         } );
 
         const user_menu = document.querySelector(".user-menu ul");
-        const show_user_menu = document.querySelector(".user-menu button");
+        const show_user_menu = document.querySelector(".user-menu .options");
 
         show_user_menu.addEventListener( "click", function() {
             if( user_menu.classList.contains("show") ) {
@@ -466,6 +461,8 @@
 
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Converstions -->
     <script>
         // Assume jQuery is included (you can also use Fetch API or other AJAX libraries)
 
@@ -486,13 +483,11 @@
                     var userMsgElement = $('<div id="user-input"></div>').html(data.data.usermsg.replace(/\n/g, '<br>'));
                     var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
                 
-                    userMsgElement.css('border', '1px solid #000'); // Customize the border color, style, and width
+                    userMsgElement.css('border', '1px solid #000'); 
+                    var logo = $('<img src="image/Ellipse 5.png" class="logo" />:'); 
+                    container.append('<span class="ml-5"></span>', logo, userMsgElement, '<br>');
                 
-                    container.append('<span class="ml-5"></span>', userElement, userMsgElement, '<br>');
-                
-                    var displayMsgElement = $('<div id="live-response"></div>'); // Response container
-                
-                    // Check if the response contains numbered points
+                    var displayMsgElement = $('<div id="live-response"></div>'); 
                     var hasNumberedPoints = /\d+\./.test(data.data.display_msg);
                 
                     if (hasNumberedPoints) {
@@ -529,15 +524,29 @@
         }
 
         // Attach this to your form submission
-        $('form').submit(function (event) {
+        $('#messageForm').submit(function (event) {
             event.preventDefault();
             var message = $('#message').val();
             sendMessage(message);
         });
 
+        function loadConversation(chatId) {
+            // Make an AJAX call to fetch conversation data based on chatId
+            $.ajax({
+                type: 'GET',
+                url: `/get_conversation/${chatId}`,  // Update URL to your API endpoint
+                success: function (data) {
+                    // Update the conversation container with the fetched content
+                    document.getElementById('conversation-container').innerHTML = data;
+                },
+                error: function () {
+                    console.error('Failed to fetch conversation data');
+                }
+            });
+        }
     </script>
 
-    
+    <!-- Hide Checkbox -->
     <script>
         $(document).ready(function(){
         $("#hideElement").click(function(){
@@ -565,12 +574,60 @@
         
     </script>
 
+    <!-- Delete chat -->
+    <script>
+        function deleteChat(chatId) {
+            fetch(`/delete-chat/${chatId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Chat deleted successfully');
+                    // Remove the chat element from the UI
+                    const chatElement = document.getElementById(`chat-${chatId}`);
+                    if (chatElement) {
+                        chatElement.remove(); // Remove the chat entry from the UI
+                    }
+                } else {
+                    console.error('Error deleting chat');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+    
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Extract the CSRF token
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+
+    <!-- Shift+Enter button -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('message').addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault();
                     document.querySelector('.send-button').click();
+                    this.style.height = '60px'; // Reset textarea height to initial size
+                    this.value = ''; // Clear the text after sending
                 } else if (event.key === 'Enter' && event.shiftKey) {
                     var message = document.getElementById('message');
                     var cursorPosition = message.selectionStart;
@@ -583,10 +640,29 @@
                 }
             });
         });
+
     </script>
 
     <!-- Approve -->
     <script>
+        function formatDate(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 should be displayed as 12
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return `${month}/${day}/${year} at ${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+
         document.addEventListener("DOMContentLoaded", function() {
             var approveBtn = document.getElementById("hideElement");
         
@@ -607,8 +683,12 @@
                 var liveResponseText = liveResponses[lastIndex].value || liveResponses[lastIndex].innerText;
                 var userInputText = userInputFields[lastIndex].value || userInputFields[lastIndex].innerText;
                 
+                var dateText = "Date Created: " + formatDate(new Date()); // Use formatDate to format the date as needed
+                doc.text(dateText, 30, yPos);
+                yPos += lineHeight;
+
                 doc.text("Approved", 30, yPos);
-                yPos += lineHeight * 2; 
+                yPos += lineHeight*2;
 
                 var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
         
@@ -639,6 +719,23 @@
 
     <!-- Disapprove -->
     <script>
+        function formatDate(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 should be displayed as 12
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return `${month}/${day}/${year} at ${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             var disapproveBtn = document.getElementById("generatePdf");
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -672,7 +769,10 @@
         
                 var splitDisapprovalText = doc.splitTextToSize(allDisapprovalReasons, doc.internal.pageSize.width - 20);
                 var disapprovalLines = doc.splitTextToSize(splitDisapprovalText, doc.internal.pageSize.width - 20);
-        
+                
+                var dateText = "Date Created: " + formatDate(new Date()); // Use formatDate to format the date as needed
+                doc.text(dateText, 30, yPos);
+                yPos += lineHeight + 20;
                 doc.text(disapprovalLines, 30, yPos);
                 yPos += (disapprovalLines.length * lineHeight) + 20;
         

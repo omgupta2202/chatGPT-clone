@@ -36,7 +36,7 @@ class CustomUserManager(BaseUserManager):
 
 # this is Custom User, overrided the USer model
 class CustomUser(AbstractUser):
-    username = None
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)
     email = models.EmailField(_("email address"), unique=True, blank=False)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)

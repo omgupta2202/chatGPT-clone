@@ -7,6 +7,6 @@ urlpatterns = [
     path('logout', views.logout_view, name="logout"),
     path('home', views.index, name="home"),
     path('delete-chat/<int:chat_id>/', views.delete_chat, name='delete_chat'),
-    path('get_conversation/<int:chat_id>/', views.get_conversation, name='get_conversation'),
+    path('get-conversation/', views.get_conversation, name='get_conversation'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
 ]

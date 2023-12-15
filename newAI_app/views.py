@@ -90,18 +90,23 @@ def get_previous_chats(user):
 
 @login_required
 def index(request):
+    chats_data = get_previous_chats(request.user)
     if request.method == 'POST':
-        prompt = request.POST.get('user-prompt')
+        prompt= request.POST.get('user-prompt')
+        title = request.POST.get('user-prompt')
         response = get_response(prompt)
         if response:
-            ChatHistory.objects.create(user=request.user, usermsg=prompt, display_msg=response)
-            data = {"usermsg": prompt, "display_msg": response, "user": request.user.username}
+            chat_history = ChatHistory.objects.create(user=request.user, usermsg=prompt, display_msg=response)
+            data = {
+                "id": chat_history.id,
+                "usermsg": prompt,
+                "display_msg": response,
+                "user": request.user.username,
+                "title": title.split('\n')[0]
+            }
             return JsonResponse({'data': data})
         else:
             return JsonResponse({'error': 'something went wrong'}, status=400)
-
-    chats_data = get_previous_chats(request.user)
-    
     return render(request, 'newAI_app/dashboard.html', chats_data)
 
 @login_required
@@ -156,12 +161,10 @@ def delete_chat(request, chat_id):
     except ChatHistory.DoesNotExist:
         return JsonResponse({'error': 'Chat does not exist'}, status=404)
     
-def get_conversation(request, chat_id):
+def get_conversation(request):
+    chat_id = request.GET.get('chatId')
     try:
-        conversation = ChatHistory.objects.get(id=chat_id)  # Retrieve conversation based on ID
-        # Perform any necessary processing or formatting of conversation data
-
-        # Prepare the conversation data to be sent as JSON response
+        conversation = ChatHistory.objects.get(id=chat_id)
         conversation_data = {
             'id': conversation.id,
             'user': conversation.user.username,
@@ -169,7 +172,8 @@ def get_conversation(request, chat_id):
             'display_msg': conversation.display_msg,
             # Add other fields from ChatHistory model as needed
         }
+        print (conversation_data)
 
-        return JsonResponse({'conversation': conversation_data})  # Return the conversation data as JSON
+        return JsonResponse({'data': conversation_data})  # Return the conversation data as JSON
     except ChatHistory.DoesNotExist:
         return JsonResponse({'error': 'Conversation not found'}, status=404)

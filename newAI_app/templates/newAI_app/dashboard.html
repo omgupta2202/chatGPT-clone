@@ -225,8 +225,6 @@
                             <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
                         </div>
                     </li>
-                {% empty %}
-                    <li>No chats today</li>
                 {% endfor %}
             
                 <li class="grouping">Yesterday</li>
@@ -240,8 +238,6 @@
                             <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
                         </div>
                     </li>
-                {% empty %}
-                    <li>No chats yesterday</li>
                 {% endfor %}
             
                 <li class="grouping">Previous days</li>
@@ -255,11 +251,9 @@
                             <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
                         </div>
                     </li>
-                {% empty %}
-                    <li>No previous chats</li>
                 {% endfor %}
             </ul>
-            <ul class="chat-titles">
+            {% comment %} <ul class="chat-titles">
                 <!-- Dynamically populated chat titles -->
                 {% for chat in chat_titles %}
                 <li id="chat-{{ chat.id }}">
@@ -267,7 +261,7 @@
                         <i class="fa fa-message fa-regular"></i> {{ chat.title }}
                     </button>
                 </li>
-                {% endfor %}
+                {% endfor %} {% endcomment %}
             </ul>
             
         </div>
@@ -341,7 +335,7 @@
         </div>
     </div>
 
-    <!-- Conversations -->
+    <!-- Conversations html -->
     <main style="display: flex; flex-direction: column; height: 100%; margin: 0 10%;">
         <div class="view new-chat-view" >
             <!-- Top Div -->
@@ -452,19 +446,17 @@
             show_view( ".new-chat-view" );
         });
 
-        document.querySelectorAll(".conversation-button").forEach(button => {
-            button.addEventListener("click", function() {
-                show_view( ".conversation-view" );
-            })
-        });
+        
     </script>
 
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <!-- Converstions -->
+    <!-- Conversations -->
     <script>
-        // Assume jQuery is included (you can also use Fetch API or other AJAX libraries)
+        $('.new-chat').on('click', function() {
+            location.reload(); // Reload the page
+        });
 
         // Function to send a message asynchronously
         function sendMessage(message) {
@@ -483,9 +475,12 @@
                     var userMsgElement = $('<div id="user-input"></div>').html(data.data.usermsg.replace(/\n/g, '<br>'));
                     var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
                 
-                    userMsgElement.css('border', '1px solid #000'); 
-                    var logo = $('<img src="image/Ellipse 5.png" class="logo" />:'); 
-                    container.append('<span class="ml-5"></span>', logo, userMsgElement, '<br>');
+                    userMsgElement.css({
+                        'border-top': '1px solid #000',});
+
+                    var logo_user = $('<img src="/static/image/Ellipse 5.png" class="logo" />:'); 
+                    var logo_gpt = $('<img src="/static/image/ChatGPT.png" class="logo" />:'); 
+                    container.append('<span class="ml-5"></span>', logo_user, userMsgElement, '<br>');
                 
                     var displayMsgElement = $('<div id="live-response"></div>'); 
                     var hasNumberedPoints = /\d+\./.test(data.data.display_msg);
@@ -509,11 +504,33 @@
                         // If no numbered points, display the response as is
                         displayMsgElement.text(data.data.display_msg);
                     }
-                
-                    container.append(displayMsgElement, '<br>'); // Append the formatted response to the container
+                    displayMsgElement.css({
+                        'border-top': '1px solid #000',});
+                    container.append(logo_gpt, displayMsgElement, '<br>'); // Append the formatted response to the container
                 
                     $('.container').append(container);
                     $('#message').val('');
+                    // Append the new chat to the conversation list
+                    var chatId = data.data.id; // Assuming the chat ID is returned in the data
+                    var chatTitle = data.data.title; // Modify this to set the appropriate chat title
+                    
+                    // Create a new list item
+                    var listItem = $('<li></li>').attr('id', 'chat-' + chatId);
+                    var button = $('<button></button>').addClass('conversation-button')
+                        .append($('<i></i>').addClass('fa fa-message fa-regular'))
+                        .append(chatTitle); // Set the chat title here
+                    var fadeDiv = $('<div></div>').addClass('fade');
+                    var editButtonsDiv = $('<div></div>').addClass('edit-buttons');
+                    var deleteButton = $('<button></button>').click(function() {
+                        deleteChat(chatId); // Call your deleteChat function with the chat ID
+                    }).append($('<i></i>').addClass('fa fa-trash'));
+                    
+                    // Append elements to the list item
+                    editButtonsDiv.append(deleteButton);
+                    listItem.append(button, fadeDiv, editButtonsDiv);
+                    
+                    // Append the new list item to the "Today" section
+                    $('.conversations .grouping:contains("Today")').after(listItem);
                 },
                 complete: function() {
                     // Ensure the loading overlay is hidden even if the request fails
@@ -530,20 +547,68 @@
             sendMessage(message);
         });
 
-        function loadConversation(chatId) {
-            // Make an AJAX call to fetch conversation data based on chatId
+        // Load conversation from title
+        $('.conversations').on('click', '.conversation-button', function() {
+            var chatId = $(this).closest('li').attr('id').split('-')[1]; 
+            console.log(chatId)
+            $('.loading-overlay').show(); 
             $.ajax({
                 type: 'GET',
-                url: `/get_conversation/${chatId}`,  // Update URL to your API endpoint
-                success: function (data) {
-                    // Update the conversation container with the fetched content
-                    document.getElementById('conversation-container').innerHTML = data;
+                url: '/get-conversation/', 
+                data: {
+                    chatId: chatId,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
-                error: function () {
-                    console.error('Failed to fetch conversation data');
-                }
+                
+                success: function (data) {
+                    $('.loading-overlay').hide();
+                    var container = $('<div class="message-container"></div>');
+                    var userMsgElement = $('<div id="user-input"></div>').html(data.data.usermsg.replace(/\n/g, '<br>'));
+                    var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
+                
+                    userMsgElement.css({
+                        'border-top': '1px solid #000',});
+
+                    var logo_user = $('<img src="/static/image/Ellipse 5.png" class="logo" />:'); 
+                    var logo_gpt = $('<img src="/static/image/ChatGPT.png" class="logo" />:'); 
+                    container.append('<span class="ml-5"></span>', logo_user, userMsgElement, '<br>');
+                
+                    var displayMsgElement = $('<div id="live-response"></div>'); 
+                    var hasNumberedPoints = /\d+\./.test(data.data.display_msg);
+                
+                    if (hasNumberedPoints) {
+                        var points = [];
+                
+                        // Check if the response is an array of points or a string
+                        if (Array.isArray(data.data.display_msg)) {
+                            points = data.data.display_msg; // Use the provided array of points
+                        } else {
+                            points = data.data.display_msg.split(/\d+\.\s+/).filter(Boolean); // Split by numbered points
+                        }
+                
+                        // Display each point with a number
+                        points.forEach(function(point, index) {
+                            var numberedPoint = $('<div></div>').text((index + 1) + '. ' + point.trim());
+                            displayMsgElement.append(numberedPoint, '<br>'); // Append each numbered point with a line break
+                        });
+                    } else {
+                        // If no numbered points, display the response as is
+                        displayMsgElement.text(data.data.display_msg);
+                    }
+                    displayMsgElement.css({
+                        'border-top': '1px solid #000',});
+                    container.append(logo_gpt, displayMsgElement, '<br>'); // Append the formatted response to the container
+                
+                    $('.container').append(container);
+                    $('#message').val('');
+                },
+                complete: function() {
+                    // Ensure the loading overlay is hidden even if the request fails
+                    $('.loading-overlay').hide();
+                },
             });
-        }
+        });
+       
     </script>
 
     <!-- Hide Checkbox -->

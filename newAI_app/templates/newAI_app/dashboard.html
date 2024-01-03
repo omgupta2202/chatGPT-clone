@@ -187,6 +187,29 @@
         padding: 1%;
         text-align: center;
         }
+        .logout-button{
+        text-decoration: none;
+        background-color: #b23b3b;
+        font-family: Poppins;
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 33px;
+        letter-spacing: 0em;
+        color: #FFFFFF;
+        width: 100%;
+        border: none;
+        padding: 1%;
+        text-align: center;
+        display: block;
+        border: 1px solid var(--color-border1);
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+        }
+        .logout-button:hover {
+            color: #FFFFFF;
+            background-color:#904e4e;
+        }
 
         .modal-body {
             padding: 10;
@@ -269,17 +292,17 @@
             <button class="hide-sidebar">
                 <   Hide Sidebar
             </button>
-            <button class="options">
+            {% comment %} <button class="options">
                 <i class="user-icon">u</i>
                 User
                 <i class="fa fa-ellipsis dots"></i>
             </button>
             <ul>
-                {% comment %} <li><button>My plan</button></li>
+                <li><button>My plan</button></li>
                 <li><button>Custom instructions</button></li>
-                <li><button>Settings &amp; Beta</button></li> {% endcomment %}
+                <li><button>Settings &amp; Beta</button></li> 
                 <li><a href="{% url 'logout' %}">Log out</a>
-            </ul>
+            </ul> {% endcomment %}
         </div>
     </nav>
 
@@ -328,7 +351,8 @@
                                 <input type="text" class="form-control edit-input" id="last_name" name="last_name" value="{{ user.last_name }}">
                             </div>
                         </div>
-                        <button type="submit" class="edit-profile-button">Save Profile</button>
+                        <button type="submit" class="edit-profile-button">Save Profile</button><br>
+                        <a href="{% url 'logout' %}" class="logout-button">Logout</a>
                     </form>
                 </div>
             </div>
@@ -340,7 +364,7 @@
         <div class="view new-chat-view" >
             <!-- Top Div -->
             <div class="model-selector">
-                <div class="model-selector-text">Default (GPT-3.5)</div>
+                <div class="model-selector-logo"><img src="{% static 'image/logo.jpeg' %}" alt=""></div>
                 <div class="model-selector-icon">
                     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <img src="{% static  'image/Ellipse 5.png' %}" alt="">

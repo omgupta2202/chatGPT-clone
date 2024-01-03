@@ -372,9 +372,17 @@ main .view {
     opacity: 0.5;
 }
 
-.model-selector-text {
-    margin-left: auto;
-}
+.model-selector-logo {
+    flex: 1; /* Take up remaining space */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+  }
+  
+  .model-selector-logo img {
+    max-width: 100px; /* Adjust image size if needed */
+    max-height: 100px;
+  }
+
 
 .model-selector-icon {
     margin-left: auto; /* Pushes the icon to the right */

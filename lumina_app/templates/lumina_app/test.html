@@ -1,0 +1,106 @@
+[8:46 PM] Desh Deepak
+<!-- templates/chat.html -->
+ 
+<html>
+
+<head>
+
+    <title>Chat</title>
+
+</head>
+
+<body>
+
+    <div id="chat"></div>
+
+    <input type="text" id="sender" placeholder="Your Name">
+
+    <input type="text" id="message" placeholder="Type a message">
+
+    <button onclick="sendMessage()">Send</button>
+ 
+    <script>
+
+        function loadChat() {
+
+            fetch('/myapp/chat/')
+
+                .then(response => response.json())
+
+                .then(messages => {
+
+                    const chatDiv = document.getElementById('chat');
+
+                    chatDiv.innerHTML = '';
+
+                    messages.forEach(message => {
+
+                        const messageDiv = document.createElement('div');
+
+                        messageDiv.innerHTML = `<strong>${message.sender}:</strong> ${message.message}`;
+
+                        chatDiv.appendChild(messageDiv);
+
+                    });
+
+                });
+
+        }
+ 
+        function sendMessage() {
+
+            const sender = document.getElementById('sender').value;
+
+            const message = document.getElementById('message').value;
+ 
+            if (sender && message) {
+
+                fetch('/myapp/chat/', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type': 'application/json',
+
+                    },
+
+                    body: JSON.stringify({
+
+                        sender: sender,
+
+                        message: message,
+
+                    }),
+
+                })
+
+                .then(response => {
+
+                    if (response.ok) {
+
+                        loadChat();
+
+                        document.getElementById('message').value = '';
+
+                    } else {
+
+                        console.error('Error sending message');
+
+                    }
+
+                });
+
+            }
+
+        }
+ 
+        // Load chat on page load
+
+        loadChat();
+
+    </script>
+
+</body>
+
+</html>

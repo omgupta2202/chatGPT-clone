@@ -1,6 +1,6 @@
-# ChatGPT Clone App
+# Lumina AI
 
-Welcome to the ChatGPT Clone App! This application is a clone of OpenAI's ChatGPT, providing similar functionality for conversational AI. The purpose of this README is to guide you through the process of setting up the app, creating database migrations, and configuring the necessary API keys and security settings.
+Welcome to the Lumina AI App! This application is a powerful conversational AI platform, providing advanced functionality for interactive sessions. The purpose of this README is to guide you through the process of setting up the app, creating database migrations, and configuring the necessary API keys and security settings.
 
 ## Table of Contents
 
@@ -15,9 +15,13 @@ Welcome to the ChatGPT Clone App! This application is a clone of OpenAI's ChatGP
 7. [Contributing](#contributing)
 8. [License](#license)
 
-## Introduction
+The Lumina AI App is designed to provide state-of-the-art conversational experiences, utilizing leading LLMs to provide responses to user queries. This app is built with a focus on ease of use and customization, allowing developers to extend and modify its features as needed.
 
-The ChatGPT Clone App is designed to replicate the functionality of ChatGPT, utilizing the OpenAI API to provide responses to user queries. This app is built with a focus on ease of use and customization, allowing developers to extend and modify its features as needed.
+### Key Features & Architecture
+- Architected an **LLM-agnostic conversational platform** using **Django REST Framework**, implementing multi-turn memory and context-aware prompt engineering for high-fidelity AI responses.
+- Engineered a scalable **Asynchronous Task Pipeline** using **Celery and Redis** for document generation (PDF/Image), offloading compute-heavy exports to maintain sub-second UI responsiveness.
+- Optimized real-time communication by managing chat state and session persistence, integrating **JWT-based security** and Google reCAPTCHA to mitigate bot-driven API abuse.
+- Developed automated data persistence workflows to store and retrieve structured chat transcripts, improving system reliability for long-running user sessions.
 
 ## Prerequisites
 

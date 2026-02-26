@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Dashboard.css' %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    <title>Edit-Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        .message-container {
+            border: 1px solid #ccc; /* Border style, width, and color */
+            padding: 10px; /* Optional: Add some padding for better spacing */
+            margin-bottom: 10px; /* Optional: Add margin between each container */
+        }
+        .fixed-buttons {
+            position: fixed;
+        }
+
+        @media (max-width: 768px) {
+            #message-form {
+                max-width: 300px; /* Adjust this value as needed */
+            }
+        }
+
+        .edit-profile-head{
+        font-family: Poppins;
+        font-size: 37px;
+        font-weight: 500;
+        line-height: 55px;
+        letter-spacing: 0em;
+        color:#414146;
+        }
+
+        .form-head{
+            padding: 2% 6% 2% 6%;
+        }
+
+        .edit-input{
+        font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #494949;
+
+        }
+        .edit-label{
+        font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        color: #494949;
+
+        }
+        .edit-select{
+        font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #494949;
+        }
+        .modal-dialog {
+         max-width: 40% !important;
+        }
+
+        .edit-profile-form{
+            padding: 2% 6% 1% 9%;
+
+        }
+        .edit-form-left{
+        text-align: center;
+
+        }
+
+        .edit-form-right{
+
+        }
+
+
+
+        .edit-span{
+        font-family: Poppins;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 23px;
+        letter-spacing: 0em;
+        color: #606060;
+
+        }
+        .edit-profile-para{
+        font-family: Poppins;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 23px;
+        letter-spacing: 0em;
+        color: #606060;
+        padding-top: 2%;
+        }
+        .edit-heading{
+            font-family: Poppins;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 27px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #414146;
+        }
+        .drop-zone {
+          /* max-width: 200px;
+          height: 50px; */
+          font-family: Poppins;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 23px;
+            letter-spacing: 0em;
+            color:#B2B2B2;
+            padding: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            border: 1px dashed#414146;
+            border-radius: 10px;
+            width: 70%;
+        }
+
+        .drop-zone--over {
+          border-style: solid;
+        }
+
+        .drop-zone__input {
+          opacity: 0;
+            position: absolute;
+            /* width: 100%;
+            height: 100%; */
+
+        }
+        .drop-zone__thumb {
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+          overflow: hidden;
+          background-color: #cccccc;
+          background-size: cover;
+          position: relative;
+        }
+        .drop-zone__thumb::after {
+          content: attr(data-label);
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          padding: 5px 0;
+          color: #ffffff;
+          background: rgba(0, 0, 0, 0.75);
+          font-size: 14px;
+          text-align: center;
+        }
+        .edit-form-body{
+        background-color:#F2F2F2;
+        }
+        .edit-profile-button{
+        background-color: #3A0761;
+        font-family: Poppins;
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 33px;
+        letter-spacing: 0em;
+        color: #FFFFFF;
+        width: 100%;
+        border: none;
+        padding: 1%;
+        text-align: center;
+        }
+        .logout-button{
+        text-decoration: none;
+        background-color: #b23b3b;
+        font-family: Poppins;
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 33px;
+        letter-spacing: 0em;
+        color: #FFFFFF;
+        width: 100%;
+        border: none;
+        padding: 1%;
+        text-align: center;
+        display: block;
+        border: 1px solid var(--color-border1);
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+        }
+        .logout-button:hover {
+            color: #FFFFFF;
+            background-color:#904e4e;
+        }
+
+        .modal-body {
+            padding: 10;
+        }
+        #container-profile{
+            padding: 30;
+        }
+
+
+        @media only screen and (max-width: 786px) {
+            .modal-dialog {
+            max-width: 500px;
+        }
+        }
+    </style>
+    
+</head>
+
+
+<body  class="dashboard-container">
+    <nav id="sidebar">
+        <div class="float-top">
+            <div class="sidebar-controls">
+                <button class="new-chat"><i class="fa fa-plus"></i> New chat</button>
+            </div>
+            <ul class="conversations">
+                
+                <li class="grouping">Today</li>
+                {% for chat in previous_chats_today %}
+                    <li id="chat-{{ chat.id }}">
+                        <button class="conversation-button">
+                            <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                        </button>
+                        <div class="fade"></div>
+                        <div class="edit-buttons">
+                            <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li>
+                {% endfor %}
+            
+                <li class="grouping">Yesterday</li>
+                {% for chat in previous_chats_yesterday %}
+                    <li id="chat-{{ chat.id }}">
+                        <button class="conversation-button">
+                            <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                        </button>
+                        <div class="fade"></div>
+                        <div class="edit-buttons">
+                            <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li>
+                {% endfor %}
+            
+                <li class="grouping">Previous days</li>
+                {% for chat in previous_chats %}
+                    <li id="chat-{{ chat.id }}">
+                        <button class="conversation-button">
+                            <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                        </button>
+                        <div class="fade"></div>
+                        <div class="edit-buttons">
+                            <button onclick="deleteChat({{ chat.id }})"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% comment %} <ul class="chat-titles">
+                <!-- Dynamically populated chat titles -->
+                {% for chat in chat_titles %}
+                <li id="chat-{{ chat.id }}">
+                    <button class="conversation-button" onclick="loadConversation({{ chat.id }})">
+                        <i class="fa fa-message fa-regular"></i> {{ chat.title }}
+                    </button>
+                </li>
+                {% endfor %} {% endcomment %}
+            </ul>
+            
+        </div>
+        <div class="user-menu">
+            <button class="hide-sidebar">
+                <   Hide Sidebar
+            </button>
+            {% comment %} <button class="options">
+                <i class="user-icon">u</i>
+                User
+                <i class="fa fa-ellipsis dots"></i>
+            </button>
+            <ul>
+                <li><button>My plan</button></li>
+                <li><button>Custom instructions</button></li>
+                <li><button>Settings &amp; Beta</button></li> 
+                <li><a href="{% url 'logout' %}">Log out</a>
+            </ul> {% endcomment %}
+        </div>
+    </nav>
+
+    <!-- Profile -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel edit-heading">User: {{ user.username }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body edit-form-body">
+                    <div class="container-profile">
+                        <div class="row pt-4" >
+                            <div class="col-md-2 edit-form-left">
+                                <img src="{% static 'image/editProfile.png' %}" alt="" class="img-fluid">
+                            </div>
+                            <div class="col-md-9 edit-form-right">
+                                <h1 class="edit-profile-head">{{ user.username }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="edit-profile-form" method="post" action="{% url 'edit_profile' %}">
+                        {% csrf_token %}
+                        <div class="form-group row form-head">
+                            <label for="username" class="col-sm-4 col-form-label edit-label">User Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="username" name="username" value="{{ user.username }}">
+                            </div>
+                        </div>
+                        <div class="form-group row form-head">
+                            <label for="email" class="col-sm-4 col-form-label edit-label">Email</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="email" name="email" value="{{ user.email }}">
+                            </div>
+                        </div>
+                        <div class="form-group row form-head">
+                            <label for="first_name" class="col-sm-4 col-form-label edit-label">First Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="first_name" name="first_name" value="{{ user.first_name }}">
+                            </div>
+                        </div>
+                        <div class="form-group row form-head">
+                            <label for="last_name" class="col-sm-4 col-form-label edit-label">Last Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control edit-input" id="last_name" name="last_name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="edit-profile-button">Save Profile</button><br>
+                        <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversations html -->
+    <main style="display: flex; flex-direction: column; height: 100%; margin: 0 10%;">
+        <div class="view new-chat-view" >
+            <!-- Top Div -->
+            <div class="model-selector">
+                <div class="model-selector-logo"><img src="{% static 'image/logo.jpeg' %}" alt=""></div>
+                <div class="model-selector-icon">
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <img src="{% static  'image/Ellipse 5.png' %}" alt="">
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- Middle Div -->
+        <div class="view conversation-view" style="flex-grow: 1; margin-bottom: 10vh;overflow-y: auto;">
+            
+            <div class="container text-left" style="color: black;"></div>
+        </div>
+    
+        <!-- Bottom Div -->
+        <div id="message-form" class="fixed-buttons" style="position: fixed; bottom: 0;">
+            <div class="message-wrapper">
+                <form id="messageForm" method="post">{% csrf_token %}
+                    <textarea id="message" rows="1" name="user-prompt" placeholder="Send a message"></textarea>
+                    
+                    <button type="submit" class="send-button">
+                        <i class="fa fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="loading-overlay">
+                <div class="spinner"></div>
+            </div>
+            <div class="">
+                <button class="btn btn-success" id="hideElement">Approve</button>
+                <button class="btn btn-danger" id="showElement">Disapprove</button>
+            </div>
+            
+            <div class="text-dark" style="display: none;" id="checkboxes">
+                <input type="checkbox" name="disapprove" value="icd-10-cm-error" class="hidden"> ICD-10-CM-Error
+                <input type="checkbox" name="disapprove" value="cpt-error" class="hidden"> CPT-Error
+                <input type="checkbox" name="disapprove" value="hcpcs-error" class="hidden"> HCPCS-Error
+                <input type="checkbox" name="disapprove" value="icd-10-pcs-error" class="hidden"> ICD-10-PCS Error
+                <input type="checkbox" name="disapprove" value="principal-diagnosis-error" class="hidden"> Principal Diagnosis Error
+                <input type="checkbox" name="disapprove" value="modifier-error" class="hidden"> Modifier Error
+                <button class="btn btn-info" id="generatePdf">Generate PDF</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Display Hide Sidebar -->
+    <script>
+        const sidebar = document.querySelector("#sidebar");
+        const hide_sidebar = document.querySelector(".hide-sidebar");
+        const new_chat_button = document.querySelector(".new-chat");
+
+        hide_sidebar.addEventListener( "click", function() {
+            sidebar.classList.toggle( "hidden" );
+        } );
+
+        const user_menu = document.querySelector(".user-menu ul");
+        const show_user_menu = document.querySelector(".user-menu .options");
+
+        show_user_menu.addEventListener( "click", function() {
+            if( user_menu.classList.contains("show") ) {
+                user_menu.classList.toggle( "show" );
+                setTimeout( function() {
+                    user_menu.classList.toggle( "show-animate" );
+                }, 200 );
+            } else {
+                user_menu.classList.toggle( "show-animate" );
+                setTimeout( function() {
+                    user_menu.classList.toggle( "show" );
+                }, 50 );
+            }
+        } );
+
+        const models = document.querySelectorAll(".model-selector button");
+
+        for( const model of models ) {
+            model.addEventListener("click", function() {
+                document.querySelector(".model-selector button.selected")?.classList.remove("selected");
+                model.classList.add("selected");
+            });
+        }
+
+        const message_box = document.querySelector("#message");
+
+        message_box.addEventListener("keyup", function() {
+            message_box.style.height = "auto";
+            let height = message_box.scrollHeight + 2;
+            if( height > 200 ) {
+                height = 200;
+            }
+            message_box.style.height = height + "px";
+        });
+
+        function show_view( view_selector ) {
+            document.querySelectorAll(".view").forEach(view => {
+                view.style.display = "none";
+            });
+
+            document.querySelector(view_selector).style.display = "flex";
+        }
+
+        new_chat_button.addEventListener("click", function() {
+            show_view( ".new-chat-view" );
+        });
+
+        
+    </script>
+
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Conversations -->
+    <script>
+        $('.new-chat').on('click', function() {
+            location.reload(); // Reload the page
+        });
+
+        // Function to send a message asynchronously
+        function sendMessage(message) {
+            $('.loading-overlay').show();
+            $.ajax({
+                type: 'POST',
+                url: '/home',  // Update this with your Django view endpoint
+                data: {
+                    'user-prompt': message,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                
+                success: function (data) {
+                    $('.loading-overlay').hide();
+                    var container = $('<div class="message-container"></div>');
+                    var userMsgElement = $('<div id="user-input"></div>').html(data.data.usermsg.replace(/\n/g, '<br>'));
+                    var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
+                
+                    userMsgElement.css({
+                        'border-top': '1px solid #000',});
+
+                    var logo_user = $('<img src="/static/image/Ellipse 5.png" class="logo" />:'); 
+                    var logo_gpt = $('<img src="/static/image/ChatGPT.png" class="logo" />:'); 
+                    container.append('<span class="ml-5"></span>', logo_user, userMsgElement, '<br>');
+                
+                    var displayMsgElement = $('<div id="live-response"></div>'); 
+                    var hasNumberedPoints = /\d+\./.test(data.data.display_msg);
+                
+                    if (hasNumberedPoints) {
+                        var points = [];
+                
+                        // Check if the response is an array of points or a string
+                        if (Array.isArray(data.data.display_msg)) {
+                            points = data.data.display_msg; // Use the provided array of points
+                        } else {
+                            points = data.data.display_msg.split(/\d+\.\s+/).filter(Boolean); // Split by numbered points
+                        }
+                
+                        // Display each point with a number
+                        points.forEach(function(point, index) {
+                            var numberedPoint = $('<div></div>').text((index + 1) + '. ' + point.trim());
+                            displayMsgElement.append(numberedPoint, '<br>'); // Append each numbered point with a line break
+                        });
+                    } else {
+                        // If no numbered points, display the response as is
+                        displayMsgElement.text(data.data.display_msg);
+                    }
+                    displayMsgElement.css({
+                        'border-top': '1px solid #000',});
+                    container.append(logo_gpt, displayMsgElement, '<br>'); // Append the formatted response to the container
+                
+                    $('.container').append(container);
+                    $('#message').val('');
+                    // Append the new chat to the conversation list
+                    var chatId = data.data.id; // Assuming the chat ID is returned in the data
+                    var chatTitle = data.data.title; // Modify this to set the appropriate chat title
+                    
+                    // Create a new list item
+                    var listItem = $('<li></li>').attr('id', 'chat-' + chatId);
+                    var button = $('<button></button>').addClass('conversation-button')
+                        .append($('<i></i>').addClass('fa fa-message fa-regular'))
+                        .append(chatTitle); // Set the chat title here
+                    var fadeDiv = $('<div></div>').addClass('fade');
+                    var editButtonsDiv = $('<div></div>').addClass('edit-buttons');
+                    var deleteButton = $('<button></button>').click(function() {
+                        deleteChat(chatId); // Call your deleteChat function with the chat ID
+                    }).append($('<i></i>').addClass('fa fa-trash'));
+                    
+                    // Append elements to the list item
+                    editButtonsDiv.append(deleteButton);
+                    listItem.append(button, fadeDiv, editButtonsDiv);
+                    
+                    // Append the new list item to the "Today" section
+                    $('.conversations .grouping:contains("Today")').after(listItem);
+                },
+                complete: function() {
+                    // Ensure the loading overlay is hidden even if the request fails
+                    $('.loading-overlay').hide();
+                },
+                
+            });
+        }
+
+        // Attach this to your form submission
+        $('#messageForm').submit(function (event) {
+            event.preventDefault();
+            var message = $('#message').val();
+            sendMessage(message);
+        });
+
+        // Load conversation from title
+        $('.conversations').on('click', '.conversation-button', function() {
+            var chatId = $(this).closest('li').attr('id').split('-')[1]; 
+            console.log(chatId)
+            $('.loading-overlay').show(); 
+            $.ajax({
+                type: 'GET',
+                url: '/get-conversation/', 
+                data: {
+                    chatId: chatId,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                
+                success: function (data) {
+                    $('.loading-overlay').hide();
+                    var container = $('<div class="message-container"></div>');
+                    var userMsgElement = $('<div id="user-input"></div>').html(data.data.usermsg.replace(/\n/g, '<br>'));
+                    var userElement = $('<div id="user-firstname"></div>').text(data.data.user);
+                
+                    userMsgElement.css({
+                        'border-top': '1px solid #000',});
+
+                    var logo_user = $('<img src="/static/image/Ellipse 5.png" class="logo" />:'); 
+                    var logo_gpt = $('<img src="/static/image/ChatGPT.png" class="logo" />:'); 
+                    container.append('<span class="ml-5"></span>', logo_user, userMsgElement, '<br>');
+                
+                    var displayMsgElement = $('<div id="live-response"></div>'); 
+                    var hasNumberedPoints = /\d+\./.test(data.data.display_msg);
+                
+                    if (hasNumberedPoints) {
+                        var points = [];
+                
+                        // Check if the response is an array of points or a string
+                        if (Array.isArray(data.data.display_msg)) {
+                            points = data.data.display_msg; // Use the provided array of points
+                        } else {
+                            points = data.data.display_msg.split(/\d+\.\s+/).filter(Boolean); // Split by numbered points
+                        }
+                
+                        // Display each point with a number
+                        points.forEach(function(point, index) {
+                            var numberedPoint = $('<div></div>').text((index + 1) + '. ' + point.trim());
+                            displayMsgElement.append(numberedPoint, '<br>'); // Append each numbered point with a line break
+                        });
+                    } else {
+                        // If no numbered points, display the response as is
+                        displayMsgElement.text(data.data.display_msg);
+                    }
+                    displayMsgElement.css({
+                        'border-top': '1px solid #000',});
+                    container.append(logo_gpt, displayMsgElement, '<br>'); // Append the formatted response to the container
+                
+                    $('.container').append(container);
+                    $('#message').val('');
+                },
+                complete: function() {
+                    // Ensure the loading overlay is hidden even if the request fails
+                    $('.loading-overlay').hide();
+                },
+            });
+        });
+       
+    </script>
+
+    <!-- Hide Checkbox -->
+    <script>
+        $(document).ready(function(){
+        $("#hideElement").click(function(){
+            $("#checkboxes").hide();
+        });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle checkboxes visibility
+            function toggleCheckboxes() {
+                var checkboxes = document.getElementById('checkboxes');
+                checkboxes.style.display = checkboxes.style.display === 'none' ? 'block' : 'none';
+            }
+        
+            // Event listener for the "Disapprove" button
+            document.getElementById('showElement').addEventListener('click', function() {
+                toggleCheckboxes();
+            });
+        
+            // Event listener for clicking "Approve" button to hide checkboxes
+            document.getElementById('hideElement').addEventListener('click', function() {
+                document.getElementById('checkboxes').style.display = 'none';
+            });
+        });
+        
+    </script>
+
+    <!-- Delete chat -->
+    <script>
+        function deleteChat(chatId) {
+            fetch(`/delete-chat/${chatId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Chat deleted successfully');
+                    // Remove the chat element from the UI
+                    const chatElement = document.getElementById(`chat-${chatId}`);
+                    if (chatElement) {
+                        chatElement.remove(); // Remove the chat entry from the UI
+                    }
+                } else {
+                    console.error('Error deleting chat');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+    
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Extract the CSRF token
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+
+    <!-- Shift+Enter button -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('message').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    document.querySelector('.send-button').click();
+                    this.style.height = '60px'; // Reset textarea height to initial size
+                    this.value = ''; // Clear the text after sending
+                } else if (event.key === 'Enter' && event.shiftKey) {
+                    var message = document.getElementById('message');
+                    var cursorPosition = message.selectionStart;
+                    var textBeforeCursor = message.value.substring(0, cursorPosition);
+                    var textAfterCursor = message.value.substring(cursorPosition, message.value.length);
+                    message.value = textBeforeCursor + '\n' + textAfterCursor;
+                    message.selectionStart = cursorPosition + 1;
+                    message.selectionEnd = cursorPosition + 1;
+                    event.preventDefault();
+                }
+            });
+        });
+
+    </script>
+
+    <!-- Approve -->
+    <script>
+        function formatDate(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 should be displayed as 12
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return `${month}/${day}/${year} at ${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var approveBtn = document.getElementById("hideElement");
+        
+            approveBtn.addEventListener("click", function() {
+                var liveResponses = document.querySelectorAll('[id="live-response"]');
+                var userInputFields = document.querySelectorAll('[id="user-input"]');
+        
+                var doc = new window.jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter' // Adjust this based on your requirements
+                });
+                
+                var yPos = 40; // Start yPos at 40 to account for margins
+                var lineHeight = 20; // Adjust this value based on your font size and content
+                var pageHeight = doc.internal.pageSize.height;
+                var lastIndex = liveResponses.length - 1; // Index of the last pair
+                var liveResponseText = liveResponses[lastIndex].value || liveResponses[lastIndex].innerText;
+                var userInputText = userInputFields[lastIndex].value || userInputFields[lastIndex].innerText;
+                
+                var dateText = "Date Created: " + formatDate(new Date()); // Use formatDate to format the date as needed
+                doc.text(dateText, 30, yPos);
+                yPos += lineHeight;
+
+                doc.text("Approved", 30, yPos);
+                yPos += lineHeight*2;
+
+                var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
+        
+                var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+                var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+        
+                var remainingSpace = pageHeight - yPos - 20;
+        
+                for (var j = 0; j < lines.length; ) {
+                    var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
+                    var chunk = lines.slice(j, j + maxLines);
+                    doc.text(chunk, 30, yPos);
+                    yPos += maxLines * lineHeight;
+                    j += maxLines;
+        
+                    if (j < lines.length) {
+                        doc.addPage();
+                        yPos = 40; // Reset yPos for the new page
+                        remainingSpace = pageHeight - 60; // Adjust for margins
+                    }
+                }
+        
+                doc.save("responses.pdf");
+            });
+        });
+        
+    </script>
+
+    <!-- Disapprove -->
+    <script>
+        function formatDate(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 should be displayed as 12
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return `${month}/${day}/${year} at ${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var disapproveBtn = document.getElementById("generatePdf");
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var disapproveReasons = document.getElementById("checkboxes");
+            var checkboxesDiv = document.getElementById("checkboxes");
+        
+            disapproveBtn.addEventListener("click", function() {
+                var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
+                    return checkbox.checked;
+                });
+        
+                var liveResponses = document.querySelectorAll('[id="live-response"]');
+                var userInputFields = document.querySelectorAll('[id="user-input"]');
+        
+                var doc = new window.jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter' // Adjust this based on your requirements
+                });
+        
+                var yPos = 40; // Start yPos at 40 to account for margins
+                var lineHeight = 20; // Adjust this value based on your font size and content
+                var pageHeight = doc.internal.pageSize.height;
+                var lastIndex = liveResponses.length - 1; // Index of the last pair
+        
+                // Print all disapproval reasons first
+                var allDisapprovalReasons = '';
+                for (var i = 0; i < selectedCheckboxes.length; i++) {
+                    allDisapprovalReasons += "Disapprove: " + selectedCheckboxes[i].value + "\n\n";
+                }
+        
+                var splitDisapprovalText = doc.splitTextToSize(allDisapprovalReasons, doc.internal.pageSize.width - 20);
+                var disapprovalLines = doc.splitTextToSize(splitDisapprovalText, doc.internal.pageSize.width - 20);
+                
+                var dateText = "Date Created: " + formatDate(new Date()); // Use formatDate to format the date as needed
+                doc.text(dateText, 30, yPos);
+                yPos += lineHeight + 20;
+                doc.text(disapprovalLines, 30, yPos);
+                yPos += (disapprovalLines.length * lineHeight) + 20;
+        
+                // Print only the last user input and live response
+                var liveResponseText = liveResponses[lastIndex].value || liveResponses[lastIndex].innerText;
+                var userInputText = userInputFields[lastIndex].value || userInputFields[lastIndex].innerText;
+        
+                var combinedText = "User Input: " + userInputText + "\n\nLive Response: " + liveResponseText + "\n";
+        
+                var splitCombinedText = doc.splitTextToSize(combinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+                var lines = doc.splitTextToSize(splitCombinedText, doc.internal.pageSize.width - 60); // Adjust margin accordingly
+        
+                var remainingSpace = pageHeight - yPos - 20;
+        
+                for (var j = 0; j < lines.length; ) {
+                    var maxLines = Math.min(Math.floor(remainingSpace / lineHeight), lines.length - j);
+                    var chunk = lines.slice(j, j + maxLines);
+                    doc.text(chunk, 30, yPos);
+                    yPos += maxLines * lineHeight;
+                    j += maxLines;
+        
+                    if (j < lines.length) {
+                        doc.addPage();
+                        yPos = 40; // Reset yPos for the new page
+                        remainingSpace = pageHeight - 60; // Adjust for margins
+                    }
+                }
+        
+                doc.save("responses.pdf");
+            });
+        });
+        
+        
+    </script>
+
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+</body>
+</html>
